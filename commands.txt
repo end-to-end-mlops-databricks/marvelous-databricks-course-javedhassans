@@ -1,0 +1,662 @@
+    1  pwd
+    2  clear
+    3  l
+    4  ls
+    5  cd projects
+    6  clear
+    7  ls
+    8  python3
+    9  clear
+   10  ls
+   11  python
+   12  python3
+   13  ls
+   14  code
+   15  clear
+   16  code
+   17  ls
+   18  cd ls
+   19  clea
+   20  clear
+   21  ls
+   22  mkdir projects
+   23  cd projects
+   24  clear
+   25  ls
+   26  pwd
+   27  clear
+   28  code .
+   29  shutdown
+   30  exit
+   31  printenv > "/var/folders/3l/9_ksltyj6259016m01k0xyqc0000gp/T/tmp-1408kUoTaaRs8DbS.txt"
+   32  clear
+   33  pip
+   34  python3
+   35  clear
+   36  python3 -m venv env_oop
+   37  source env_oop/bin/activate
+   38  clear
+   39  pip list
+   40  clear
+   41  pip list
+   42  python3 -m pip install --upgrade pip
+   43  clear
+   44  pip list
+   45  clear
+   46  ls
+   47  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.0.1/pythonFiles/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.0.1/pythonFiles/deactivate/zsh/envVars.txt
+   48  clear
+   49  ls
+   50  cd projects
+   51  ls
+   52  cler
+   53  clear
+   54  code
+   55  clear
+   56  mkdir oop
+   57  cd oop
+   58  clear
+   59  python3 -m venv $VENV_PATH
+   60  python3
+   61  clear
+   62  python
+   63  clear
+   64  pip3
+   65  clear
+   66  pip3 list
+   67  python3 -m pip install --upgrade pip
+   68  pip3 list
+   69  python3 -m pip install venv
+   70  pip3 install venv
+   71  pip list
+   72  clear
+   73  pip3 list
+   74  pip3 install venv
+   75  sudo
+   76  sudo apt-get install pyhton3-venv
+   77  sudo apt-get install pyhton3-venv
+   78  clear
+   79  apt-get install pyhton3-venv
+   80  clear
+   81  sudo apt-get install python3-venv
+   82  oweroff
+   83  poweroff
+   84  --help
+   85  help
+   86  -help
+   87  clear
+   88  --help
+   89  exit
+   90  man
+   91  clear
+   92  exit
+   93  clear
+   94  ls
+   95  exit
+   96  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.0.1/pythonFiles/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.0.1/pythonFiles/deactivate/zsh/envVars.txt
+   97  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.2.1/pythonFiles/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.2.1/pythonFiles/deactivate/zsh/envVars.txt
+   98  clear
+   99  python
+  100  python3
+  101  python --version
+  102  python3 --version
+  103  which -a python3
+  104  brew list | grep python
+  105  sudo apt-get
+  106  sudo
+  107  clear
+  108  clear
+  109  ls
+  110  clar
+  111  clear
+  112  brew
+  113  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  114  clear
+  115  brew
+  116  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.8.1/python_files/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.8.1/python_files/deactivate/zsh/envVars.txt
+  117  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.8.1/python_files/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.8.1/python_files/deactivate/zsh/envVars.txt
+  118  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/deactivate/zsh/envVars.txt
+  119  git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+  120  ZSH_THEME="powerlevel10k/powerlevel10k"
+  121  source ~/.zshrc
+  122  y
+  123  clear
+  124  brew
+  125  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  126  brew
+  127  clear
+  128  brew
+  129  brew -V
+  130  which brew
+  131  brew --version
+  132  brew doctore
+  133  brew doctor
+  134  /opt/homebrew/bin/brew doctor
+  135  echo 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc
+  136  brew
+  137  /opt/homebrew/bin/brew doctor
+  138  export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc\n/opt/homebrew/bin/brew doctor
+  139  clear
+  140  /opt/homebrew/bin/brew doctor
+  141  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"\n
+  142  \n
+  143  echo >> /Users/javedhassansabu/.zprofile
+  144  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/javedhassansabu/.zprofile
+  145  eval "$(/opt/homebrew/bin/brew shellenv)"
+  146  clear
+  147  brew
+  148  clear
+  149  brew update
+  150  ^[[200~brew unlink python@3.9
+  151  clear
+  152  brew unlink python@3.9\n
+  153  brew unlink python3
+  154  python3
+  155  cl;ear
+  156  clear
+  157  brew unlink python@3.9\n
+  158  sudo rm -rf /Library/Frameworks/Python.framework/Versions/3.9\n
+  159  python3
+  160  clear
+  161  sudo rm -rf /Library/Frameworks/Python.framework/Versions/3.9\n
+  162  sudo rm /usr/local/bin/python3.9\nsudo rm /usr/local/bin/pip3.9\n
+  163  which python3
+  164  brew install pyenv\n
+  165  clear
+  166  echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc\necho 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc\necho 'eval "$(pyenv init --path)"' >> ~/.zshrc\n
+  167  source ~/.zshrc  
+  168  git
+  169  clear
+  170  ^[[200~uv --version
+  171  ~uv --version\n
+  172  clear
+  173  uv --version
+  174  pip
+  175  clear
+  176  brew install uv
+  177  clear
+  178  uv
+  179  clear
+  180  ls
+  181  cd projects
+  182  ls
+  183  git clone https://github.com/end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git
+  184  clear
+  185  ls
+  186  cd marvelous-databricks-course-javedhassans
+  187  ls
+  188  cat pyproject.toml
+  189  clear
+  190  cat pytest.ini
+  191  clear
+  192  brew install python@3.11
+  193  clear
+  194  python3.11
+  195  clear
+  196  uv venv -p $(brew --prefix python@3.11)/bin/python3 venv
+  197  clear
+  198  uv venv -p $(brew --prefix python@3.11)/bin/python3 venv\n
+  199  python3.11
+  200  clear
+  201  which python3.11
+  202  uv venv -p $(brew --prefix python@3.11)/bin/python3.11 venv\n
+  203  source venv/bin/activate\n
+  204  ls
+  205  uv pip install -r pyproject.toml --all-extras
+  206  uv lock
+  207  uv lock
+  208  uv lock --help
+  209  clear
+  210  uv pip install -r pyproject.toml --all-extras
+  211  uv lock
+  212  clear
+  213  ls
+  214  rm -rf venv
+  215  deactivate
+  216  clar
+  217  clear
+  218  ls
+  219  uv venv -p 3.11.0 venv\nsource venv/bin/activate\nuv pip install -r pyproject.toml --all-extras\nuv lock
+  220  brew list python@3.11
+  221  $(brew --prefix python@3.11)/bin/python3 --version
+  222  clear
+  223  uv venv -p /opt/homebrew/Cellar/python@3.11/3.11.10/bin/python3.11 venv
+  224  source venv/bin/activate
+  225  pip
+  226  pip list
+  227  clear
+  228  uv pip install -r pyproject.toml --all-extra
+  229  clear
+  230  uv pip install -r pyproject.toml --all-extras
+  231  uv lock
+  232  clear
+  233  uv
+  234  clear
+  235  rm -rf venv
+  236  deactivate
+  237  clear
+  238  ls
+  239  uv
+  240  clear
+  241  uv venv -p 3.11.0 venv
+  242  which python3.11\n
+  243  nano ~/.zshrc   # for zsh\nnano ~/.bash_profile   # for bash\n
+  244  nano ~/.zshrc   # for zsh\nnano ~/.bash_profile   # for bash\n
+  245  clear
+  246  export PATH="/opt/homebrew/bin:$PATH"\n
+  247  source ~/.zshrc
+  248  source ~/.bash_profile
+  249  python3.11 --version\n
+  250  Python 3.11.0\n
+  251  Python 3.11.0\n
+  252  Python3.11.0\n
+  253  Python3.11
+  254  clear
+  255  uv venv -p /opt/homebrew/bin/python3.11 venv\n
+  256  source venv/bin/activate
+  257  uv pip install -r pyproject.toml --all-extra
+  258  clear
+  259  ls
+  260  pip install -r pyproject.toml --all-extras
+  261  uv pip install -r pyproject.toml --all-extras
+  262  uv lock
+  263  code .
+  264  uv lock
+  265  uv lock
+  266  clear
+  267  deactivate
+  268  clear
+  269  brew --version
+  270  brew install --cask iterm2
+  271  git --version
+  272  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  273  ls
+  274  cd projects
+  275  ls
+  276  cd marvelous-databricks-course-javedhassans
+  277  exit
+  278  p10k configure
+  279  source ~/.zshrc
+  280  p10k configure
+  281  text
+  282  clear
+  283  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  284  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  285  nano /.zshrc
+  286  source ~/.zshrc
+  287  exit
+  288  ls
+  289  cd projects
+  290  ls
+  291  cd marvelous-databricks-course-javedhassans
+  292  clear
+  293  ls
+  294  exit
+  295  curl https://raw.githubusercontent.com/yassine-rd/mac-terminal-config/main/coolkheey.itermcolors --output ~/Downloads/coolkheey.itermcolors
+  296  ls
+  297  clear
+  298  (curl -Ls https://raw.githubusercontent.com/sindresorhus/iterm2-snazzy/main/Snazzy.itermcolors > /tmp/Snazzy.itermcolors && open /tmp/Snazzy.itermcolors)
+  299  # Oh My Zsh\nsh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"\n# zplug\nbrew install zplug
+  300  # ~.zshrc\nexport ZSH=~/.oh-my-zsh\n# disable oh-my-zsh themes for pure prompt\nZSH_THEME=""\nsource $ZSH/oh-my-zsh.sh\nexport ZPLUG_HOME=/usr/local/opt/zplug\nsource $ZPLUG_HOME/init.zsh\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug load\n# Install plugins if there are plugins that have not been installed\nif ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  301  xport ZSH=~/.oh-my-zsh
+  302  # ~.zshrc\nexport ZSH=~/.oh-my-zsh\n# disable oh-my-zsh themes for pure prompt\nZSH_THEME=""\nsource $ZSH/oh-my-zsh.sh\nexport ZPLUG_HOME=/usr/local/opt/zplug\nsource $ZPLUG_HOME/init.zsh\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug load\n# Install plugins if there are plugins that have not been installed\nif ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  303  # Oh My Zsh\nsh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"\n# zplug\nbrew install zplug
+  304  brew reinstall zplug
+  305  # ~.zshrc\nexport ZSH=~/.oh-my-zsh\n# disable oh-my-zsh themes for pure prompt\nZSH_THEME=""\nsource $ZSH/oh-my-zsh.sh\nexport ZPLUG_HOME=/usr/local/opt/zplug\nsource $ZPLUG_HOME/init.zsh\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug load\n# Install plugins if there are plugins that have not been installed\nif ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  306  source ~/.zshrc
+  307  zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
+  308  clear
+  309  [200~git clone https://github.com/z-shell/F-Sy-H.git \\n  ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H~
+  310  git clone https://github.com/z-shell/F-Sy-H.git \\n  ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/F-Sy-H
+  311  ls
+  312  zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
+  313  brew install zplug
+  314  brew reinstall zplug
+  315  export ZPLUG_HOME=/opt/homebrew/opt/zplug
+  316  source $ZPLUG_HOME/init.zsh
+  317  # ~.zshrc\nexport ZSH=~/.oh-my-zsh\n# disable oh-my-zsh themes for pure prompt\nZSH_THEME=""\nsource $ZSH/oh-my-zsh.sh\nexport ZPLUG_HOME=/usr/local/opt/zplug\nsource $ZPLUG_HOME/init.zsh\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug load\n# Install plugins if there are plugins that have not been installed\nif ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  318  ource ~/.zshrc
+  319  zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
+  320  clear
+  321  source ~/.zshrc
+  322  export ZSH=~/.oh-my-zsh
+  323  ZSH_THEME=""
+  324  export ZPLUG_HOME=/usr/local/opt/zplug\nsource $ZPLUG_HOME/init.zsh
+  325  export ZPLUG_HOME=/usr/local/opt/zplu
+  326  source $ZPLUG_HOME/init.zsh
+  327  zplug "mafredri/zsh-async", from:github
+  328  zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+  329  zplug load
+  330  if ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  331  zplug load\n
+  332  clear
+  333  exit
+  334  zplug load
+  335  if ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  336  zplug install\n
+  337  clear
+  338  zplug
+  339  zplug install\n
+  340  zplug load
+  341  zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
+  342  exit
+  343  # ~.zshrc\nexport ZSH=~/.oh-my-zsh\n# disable oh-my-zsh themes for pure prompt\nZSH_THEME=""\nsource $ZSH/oh-my-zsh.sh\nexport ZPLUG_HOME=/usr/local/opt/zplug\nsource $ZPLUG_HOME/init.zsh\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug load\n# Install plugins if there are plugins that have not been installed\nif ! zplug check --verbose; then\n    printf "Install? [y/N]: "\n    if read -q; then\n        echo; zplug install\n    fi\nfi
+  344  export ZSH=~/.oh-my-zsh
+  345  ZSH_THEME=""
+  346  source $ZSH/oh-my-zsh.sh
+  347  export ZPLUG_HOME=/usr/local/opt/zplug
+  348  source $ZPLUG_HOME/init.zsh
+  349  zplug "mafredri/zsh-async", from:github
+  350  zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+  351  zplug load
+  352  zplug install\n
+  353  zplug
+  354  clear
+  355  zplug
+  356  brew install zplug
+  357  zplug
+  358  brew reinstall zplug
+  359  brew cleanup zplug
+  360  zplug
+  361  brew reinstall zplug
+  362  export ZPLUG_HOME=/opt/homebrew/opt/zplug
+  363  source $ZPLUG_HOME/init.zsh
+  364  zplug
+  365  export ZSH=~/.oh-my-zsh
+  366  ZSH_THEME=""
+  367  source $ZSH/oh-my-zsh.sh
+  368  export ZPLUG_HOME=/usr/local/opt/zplug
+  369  source $ZPLUG_HOME/init.zsh
+  370  zplug
+  371  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh\n
+  372  rm -rf /usr/local/opt/zplug\n
+  373  export ZPLUG_HOME="$HOME/.zplug"\ncurl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh\n
+  374  export ZPLUG_HOME="$HOME/.zplug"\nsource $ZPLUG_HOME/init.zsh\nzplug load\n
+  375  source ~/.zshrc\n
+  376  zplug
+  377  zplug load\n
+  378  zplug clear\n
+  379  export ZPLUG_HOME="$HOME/.zplug"\n
+  380  zplug install\n
+  381  zplug load\n
+  382  # Initialize zplug\nexport ZPLUG_HOME="$HOME/.zplug"\nsource $ZPLUG_HOME/init.zsh\n\n# Load plugins with zplug\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug "zdharma/fast-syntax-highlighting", from:github\n\n# Install plugins if they aren't already installed\nif ! zplug check --verbose; then\n    zplug install\nfi\n\n# Load installed plugins\nzplug load\n
+  383  source ~/.zshrc\n
+  384  exec zsh\n
+  385  clear
+  386  zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
+  387  zplug
+  388  ls ~/.zplug\n
+  389  clear
+  390  ls ~/.zplug\n
+  391  nano ~/.zshrc\n
+  392  zplug
+  393  zplug install\n
+  394  zplug clear\n
+  395  rm -rf /usr/local/opt/zplug\n
+  396  ls ~/.zplug\n
+  397  rm -rf~/.zplug\n
+  398  rm -rf ~/.zplug\n
+  399  ls ~/.zplug\n
+  400  clear
+  401  export ZPLUG_HOME="$HOME/.zplug"\ncurl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh\n
+  402  export ZPLUG_HOME="$HOME/.zplug"\nsource $ZPLUG_HOME/init.zsh\nzplug load\n
+  403  ls ~/.zplug\n
+  404  clear
+  405  ls ~/.zplug\n
+  406  export ZPLUG_HOME="$HOME/.zplug"\nsource $ZPLUG_HOME/init.zsh\nzplug load\n
+  407  zplug clear\n
+  408  zplug install\n
+  409  zplug load\n
+  410  ls ~/.zplug\n
+  411  # Example plugin setup in .zshrc\nzplug "mafredri/zsh-async", from:github\nzplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme\nzplug "zdharma/fast-syntax-highlighting", from:github\n\n# Install plugins if they are not installed\nif ! zplug check --verbose; then\n    zplug install\nfi\n\n# Load installed plugins\nzplug load\n
+  412  source ~/.zshrc
+  413  clear
+  414  ls
+  415  cd projects
+  416  ls
+  417  cd marvelous-databricks-course-javedhassans
+  418  clear
+  419  ls
+  420  exit
+  421  cd projects/marvelous-databricks-course-javedhassans
+  422  code .
+  423  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/deactivate/zsh/envVars.txt
+  424  clear
+  425  docker
+  426  clar
+  427  clear
+  428  docker ps -a
+  429  clear
+  430  ls
+  431  cd p
+  432  cd projects
+  433  clear
+  434  ls
+  435  cd marvelous-databricks-course-javedhassans
+  436  git branch
+  437  clar
+  438  git branch -a
+  439  clear
+  440  exit
+  441  cd projects/marvelous-databricks-course-javedhassans
+  442  clear
+  443  source venv/bin/activate
+  444  clear
+  445  pip list
+  446  clear
+  447  ls
+  448  databricks
+  449  clear
+  450  databricks
+  451  clear
+  452  poweroff
+  453  shutdown
+  454  exit
+  455  start chrome
+  456  chrome
+  457  google chrome
+  458  clear
+  459  cd projects
+  460  ls
+  461  exit
+  462  databricks 
+  463  brew tap databricks/tap
+  464  brew install databricks
+  465  databricks -v
+  466  echo fpath+=$(brew --prefix)/share/zsh/site-functions >> ~/.zshrc\n
+  467  echo 'autoload -Uz compinit && compinit' >> ~/.zshrc\n
+  468  databricks ls
+  469  databricks fs
+  470  clear
+  471  cd projects
+  472  cd marvelous-databricks-course-javedhassans
+  473  clear
+  474  ls
+  475  code .
+  476  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/deactivate/zsh/envVars.txt
+  477  printenv > "/var/folders/3l/9_ksltyj6259016m01k0xyqc0000gp/T/tmp-4399uzte5Dk7KrYP.txt"
+  478  printenv > "/var/folders/3l/9_ksltyj6259016m01k0xyqc0000gp/T/tmp-4892z4Pfo9zTT9QU.txt"
+  479  /usr/bin/python3 /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/printEnvVariablesToFile.py /Users/javedhassansabu/.vscode/extensions/ms-python.python-2024.16.1-darwin-arm64/python_files/deactivate/zsh/envVars.txt
+  480  databrikcs 
+  481  databricks
+  482  databricks auth
+  483  databricks auth --help
+  484  databricks auth login --help
+  485  databricks auth login --configure-cluster --help
+  486  clear
+  487  databricks auth login --configure-cluster --help
+  488  databricks auth login --host --help
+  489  clear
+  490  databricks configure --help
+  491  cat ~/.databrickscfg
+  492  clear
+  493  databricks auth login --configure-cluster --host https://dbc-643c4c2b-d6c9.cloud.databricks.com/
+  494  databricks auth profiles
+  495  databricks configure
+  496  databricks auth profiles
+  497  pwd
+  498  ls
+  499  ls -a
+  500  cat .databricks
+  501  ls
+  502  cat .databrickscfg
+  503  rm .databrickscfg
+  504  ls -a
+  505  cat .databricks
+  506  cd .databricks
+  507  ls
+  508  cat token-cache.json
+  509  ls
+  510  rm token-cache.json
+  511  ls
+  512  exit
+  513  clar
+  514  clea
+  515  clear
+  516  databricks auth profiles
+  517  databricks auth login - configure-cluster - host https://dbc-643c4c2b-d6c9.cloud.databricks.com/
+  518  databricks auth login - configure-cluster --host 
+  519  clear
+  520  databricks auth login --configure-cluster --host https://dbc-643c4c2b-d6c9.cloud.databricks.com/\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
+  521  clear
+  522  data
+  523  databricks
+  524  clar
+  525  clear
+  526  databricks auth profiles
+  527  databricks auth token --host https://dbc-643c4c2b-d6c9.cloud.databricks.com/
+  528  databricks configure
+  529  clear
+  530  databricks auth profiles
+  531  databricks auth login --configure-cluster --host https://dbc-643c4c2b-d6c9.cloud.databricks.com/\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
+  532  clear
+  533  databricks current-user
+  534  databricks current-user me
+  535  clear
+  536  databricks auth login --configure-cluster --host https://dbc-643c4c2b-d6c9.cloud.databricks.com/\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
+  537  clear
+  538  cd ~
+  539  ls -a
+  540  cat .databrickscfg
+  541  clear
+  542  databricks auth env --profile
+  543  databricks auth env --profile Default
+  544  databricks auth env --profile javed-e2e-mlops
+  545  databricks auth list
+  546  databricks auth list\n
+  547  databricks auth profiles\n
+  548  databricks auth env --profile DEFAULT
+  549  nano ~/.databrickscfg
+  550  databricks auth env --profile javed-e2e-mlops
+  551  nano ~/.databrickscfg\n
+  552  clear
+  553  databricks auth env --profile new-profile-name\n
+  554  databricks auth env --profile javed-mlops\n
+  555  clear
+  556  databricks auth profiles
+  557  cd projects/marvelous-databricks-course-javedhassans
+  558  clear
+  559  git status
+  560  git pul
+  561  git fetch
+  562  clear
+  563  git status
+  564  git commit .
+  565  cd projects/marvelous-databricks-course-javedhassans
+  566  clea
+  567  clear
+  568  git status
+  569  git branch -a
+  570  clear
+  571  git branch
+  572  clear
+  573  git checkout -b dev-week1
+  574  git status
+  575  git add .
+  576  clear
+  577  git status
+  578  git commit -a -m "first initial commit after setup"
+  579  clear
+  580  git status
+  581  clear
+  582  git push origin dev-week1:week01
+  583  clear
+  584  git push 
+  585  git push origin dev-week1:week01
+  586  git remote -v\n
+  587  ssh -T git@github.com\n# Attempts to ssh to GitHub\n
+  588  git push origin dev-week1:week01
+  589  ssh-keygen -t ed25519 -C "javedhassans@outlook.com"
+  590  eval "$(ssh-agent -s)"
+  591  open ~/.ssh/config
+  592  touch ~/.ssh/config
+  593  nano ~/.ssh/config\n
+  594  ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+  595  git remote -v\n
+  596  cd projects/marvelous-databricks-course-javedhassans
+  597  clear
+  598  git remote -v\n
+  599  git push origin dev-week1:week01
+  600  cat ~/.ssh/id_rsa.pub\n
+  601  cd ~
+  602  cat ~/.ssh/id_rsa.pub\n
+  603  ssh-keygen -t rsa -b 4096 -C "javedhassans@outlook.com"\n
+  604  cat ~/.ssh/id_rsa.pub\n
+  605  git remote set-url origin git@github.com:end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git\n
+  606  git remote set-url origin git@github.com:end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git
+  607  cd projects/marvelous-databricks-course-javedhassans
+  608  git remote set-url origin git@github.com:end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git
+  609  ssh -T git@github.com\n
+  610  ls -al ~/.ssh\n
+  611  eval "$(ssh-agent -s)"\n
+  612  cd  -al ~/.ssh\n
+  613  cd ..
+  614  cd .ssh
+  615  ls
+  616  cd ..
+  617  rm -rf .ssh
+  618  clear
+  619  ls -al ~/.ssh\n
+  620  ssh-keygen -t rsa -b 4096 -C "javedhassans@outlook.com"\n
+  621  ls -al ~/.ssh\n
+  622  eval "$(ssh-agent -s)"\n
+  623  ssh-add ~/.ssh/id_rsa\n
+  624  cat ~/.ssh/id_rsa.pub\n
+  625  ssh -T git@github.com\n
+  626  cd projects/marvelous-databricks-course-javedhassans
+  627  ssh -T git@github.com\n
+  628  exit
+  629  ^[[200~ssh -T git@github.com
+  630  clear
+  631  ssh -T git@github.com\n
+  632  clear
+  633  ssh -T git@github.com\n
+  634  nano ~/.ssh/config\n
+  635  ssh -T git@github.com\n
+  636  cd projects/marvelous-databricks-course-javedhassans
+  637  clear
+  638  git remote -v
+  639  git@github.com:end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git\n
+  640  git@github.com:end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git
+  641  cd ..
+  642  git@github.com:end-to-end-mlops-databricks/marvelous-databricks-course-javedhassans.git
+  643  nano ~/.ssh/config\n
+  644  cd marvelous-databricks-course-javedhassans
+  645  ls
+  646  git push origin dev-week1:week01
+  647  ssh -T git@github.com\n
+  648  git remote -v\n
+  649  clear
+  650  ssh -T git@github.com\n
+  651  git push origin dev-week1:week01
+  652  history
+  653  history > ~/Documents/commands.txt
+  654* ls
+  655* cd Documents
+  656* ls
+  657* cd ..
+  658* cd Documents
+  659* ls
+  660* ls -ltr
+  661* sudo ls
+  662* clear
