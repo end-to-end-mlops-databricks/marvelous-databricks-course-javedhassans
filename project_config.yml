@@ -5,10 +5,16 @@ catalog_name: "mlops_students"
 schema_name: "javedhassi"
 
 # Parameters for data processing
-parameters:
+data_cleaning_parameters:
   drop_threshold: 0.8  # Threshold for dropping columns with missing values
   lower_bound: 0.05    # Lower quantile bound for outlier detection
   upper_bound: 0.95    # Upper quantile bound for outlier detection
+
+# Parameters for model training
+model_parameters:
+  learning_rate: 0.01  # Learning rate for the model
+  n_estimators: 1000   # Number of trees in the model
+  max_depth: 6         # Maximum depth of the tree
 
 # Numerical features
 num_features:

@@ -8,7 +8,8 @@ class ProjectConfig(BaseModel):
     target: str
     catalog_name: str
     schema_name: str
-    parameters: Dict[str, Any]  # Dictionary to hold model-related parameters
+    data_cleaning_parameters: Dict[str, Any]  # Dictionary to hold data cleaning parameters
+    model_parameters: Dict[str, Any]  # Dictionary to hold model-related parameters
 
     @classmethod
     def from_yaml(cls, config_path: str):

@@ -36,8 +36,8 @@ class DataProcessor:
             self.df[col] = pd.to_numeric(self.df[col], errors='coerce')
         
         # Remove outliers in numerical features
-        lower_bound = self.config.parameters['lower_bound']
-        upper_bound = self.config.parameters['upper_bound']
+        lower_bound = self.config.data_cleaning_parameters['lower_bound']
+        upper_bound = self.config.data_cleaning_parameters['upper_bound']
         self.df = remove_outliers(self.df, num_features, lower_bound, upper_bound)
         
         # Impute missing values for numerical features with the median
