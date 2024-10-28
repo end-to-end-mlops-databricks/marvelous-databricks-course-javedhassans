@@ -60,7 +60,7 @@ class DataProcessor:
         self.df[target].fillna(new_value, inplace=True)
         
         # Keep only relevant columns
-        relevant_columns = cat_features + num_features + [target, 'Id']
+        relevant_columns = cat_features + num_features + [target, 'id']
         self.df = self.df[relevant_columns]
         
         return self.df

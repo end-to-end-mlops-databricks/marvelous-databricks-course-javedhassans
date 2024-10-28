@@ -84,7 +84,6 @@ num_features:
 
 # Categorical features
 cat_features:
-  - id
   - Basic_Demos-Enroll_Season
   - CGAS-Season
   - Physical-Season
