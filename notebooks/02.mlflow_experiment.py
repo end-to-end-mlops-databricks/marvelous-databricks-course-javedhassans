@@ -5,6 +5,8 @@ import mlflow
 
 mlflow.set_tracking_uri("databricks")
 
+# COMMAND --------------
+
 mlflow.set_experiment(experiment_name="/Shared/child-health-basic")
 mlflow.set_experiment_tags({"repository_name": "child-health"})
 
@@ -17,6 +19,7 @@ print(experiments)
 # COMMAND ----------
 with open("mlflow_experiment.json", "w") as json_file:
     json.dump(experiments[0].__dict__, json_file, indent=4)
+    
 # COMMAND ----------
 with mlflow.start_run(
     run_name="demo-run",
@@ -43,3 +46,5 @@ print(run_info["data"]["metrics"])
 
 # COMMAND ----------
 print(run_info["data"]["params"])
+
+# COMMAND ----------
