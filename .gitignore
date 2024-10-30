@@ -97,3 +97,6 @@ dmypy.json
 .history
 
 .databricks
+
+# Ignore all .parquet files
+*.parquet
