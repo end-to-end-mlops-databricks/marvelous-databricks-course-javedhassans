@@ -1,7 +1,7 @@
 {
-    "_experiment_id": "222855090029336",
+    "_experiment_id": "941761294708082",
     "_name": "/Shared/child-health-basic",
-    "_artifact_location": "dbfs:/databricks/mlflow-tracking/222855090029336",
+    "_artifact_location": "dbfs:/databricks/mlflow-tracking/941761294708082",
     "_lifecycle_stage": "active",
     "_tags": {
         "mlflow.experiment.sourceName": "/Shared/child-health-basic",
@@ -10,6 +10,6 @@
         "mlflow.experimentType": "MLFLOW_EXPERIMENT",
         "repository_name": "child-health"
     },
-    "_creation_time": 1730218426435,
-    "_last_update_time": 1730218426435
+    "_creation_time": 1730287471358,
+    "_last_update_time": 1730287471358
 }
