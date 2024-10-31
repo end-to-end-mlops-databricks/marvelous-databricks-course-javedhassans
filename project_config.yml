@@ -86,6 +86,7 @@ num_features:
   - PCIAT-PCIAT_Total
   - SDS-SDS_Total_Raw  # Sleep Disturbance Scale (SDS) Total Raw
   - SDS-SDS_Total_T    # Sleep Disturbance Scale (SDS) Total T
+  - PreInt_EduHx-Season
   - PreInt_EduHx-computerinternet_hoursday 
 
 # Categorical features
@@ -100,7 +101,7 @@ cat_features:
   - PAQ_C-Season      # Physical Activity Questionnaire (PAQ) C Season
   - PCIAT-Season      # PCIAT-Season
   - SDS-Season      # Sleep Disturbance Scale (SDS) Season  
-  - PreInt_EduHx-Season
+
 
 # Target column
 target: sii
