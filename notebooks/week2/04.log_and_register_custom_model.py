@@ -23,7 +23,7 @@ client = MlflowClient()
 
 # COMMAND ----------
 
-config = ProjectConfig.from_yaml(config_path="../project_config.yml")
+config = ProjectConfig.from_yaml(config_path="../../project_config.yml")
 
 # Extract configuration details
 num_features = config.num_features
