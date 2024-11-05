@@ -4,11 +4,11 @@
 catalog_name: "mlops_students"
 schema_name: "javedhassi"
 
-# # Parameters for data processing
-# data_cleaning_parameters:
-#   drop_threshold: 0.8  # Threshold for dropping columns with missing values
-#   lower_bound: 0.05    # Lower quantile bound for outlier detection
-#   upper_bound: 0.95    # Upper quantile bound for outlier detection
+# Parameters for data processing
+data_cleaning_parameters:
+  drop_threshold: 0.8  # Threshold for dropping columns with missing values
+  lower_bound: 0.05    # Lower quantile bound for outlier detection
+  upper_bound: 0.95    # Upper quantile bound for outlier detection
 
 # Parameters for model training
 model_parameters:
@@ -101,7 +101,6 @@ cat_features:
   - PAQ_C-Season      # Physical Activity Questionnaire (PAQ) C Season
   - PCIAT-Season      # PCIAT-Season
   - SDS-Season      # Sleep Disturbance Scale (SDS) Season  
-
 
 # Target column
 target: sii

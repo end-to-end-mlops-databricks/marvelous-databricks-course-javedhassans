@@ -1,9 +1,20 @@
 # Databricks notebook source
+%pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl
+
+
+# COMMAND ----------
+
+dbutils.library.restartPython()
+
+# COMMAND ----------
 
 from pyspark.sql import SparkSession
 from childHealth.config import ProjectConfig
 from childHealth.data_processor import DataProcessor
 from datetime import datetime
+
+import warnings
+warnings.filterwarnings("ignore")
 
 # Initialize Spark session
 spark = SparkSession.builder.getOrCreate()
