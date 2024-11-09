@@ -3,13 +3,13 @@ from typing import List, Dict, Any
 import yaml
 
 class ProjectConfig(BaseModel):
+    catalog_name: str
+    schema_name: str
+    # data_cleaning_parameters: Dict[str, Any]  # Dictionary to hold data cleaning parameters
+    model_parameters: Dict[str, Any]  # Dictionary to hold model-related parameters
     num_features: List[str]
     cat_features: List[str]
     target: str
-    catalog_name: str
-    schema_name: str
-    data_cleaning_parameters: Dict[str, Any]  # Dictionary to hold data cleaning parameters
-    model_parameters: Dict[str, Any]  # Dictionary to hold model-related parameters
 
     @classmethod
     def from_yaml(cls, config_path: str):

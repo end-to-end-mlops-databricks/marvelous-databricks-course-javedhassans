@@ -1,4 +1,5 @@
 # Databricks notebook source
+
 %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl
 
 
@@ -10,7 +11,7 @@ dbutils.library.restartPython()
 
 from pyspark.sql import SparkSession
 from childHealth.config import ProjectConfig
-from childHealth.data_processor import DataProcessor
+from childHealth.data_processor import TrainDataProcessor
 from datetime import datetime
 
 import warnings
@@ -36,13 +37,14 @@ df = spark.read.csv(
 # COMMAND ----------
 
 # Initialize DataProcessor with the loaded DataFrame and configuration
-data_processor = DataProcessor(pandas_df=df, config=config)
+data_processor = TrainDataProcessor(train_df=df, config=config)
 
 # Preprocess the data
-data_processor.preprocess()
+data_processor.process()
 
 # Split the data into training and testing sets
 train_set, test_set = data_processor.split_data()
 
 # Save the processed datasets to the catalog
 data_processor.save_to_catalog(train_set=train_set, test_set=test_set, spark=spark)
+# COMMAND ----------

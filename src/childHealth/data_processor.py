@@ -12,9 +12,9 @@ class TrainDataProcessor:
     def __init__(self, train_df: pd.DataFrame, config: ProjectConfig):
         self.train_df = train_df
         self.config = config
-        self.num_features = self.config['num_features']
-        self.cat_features = self.config['cat_features']
-        self.target = self.config['target']
+        self.num_features = self.config.num_features
+        self.cat_features = self.config.cat_features
+        self.target = self.config.target
 
     def preprocess_data(self):
         """Preprocess the train dataset by handling missing values and data type conversions."""
