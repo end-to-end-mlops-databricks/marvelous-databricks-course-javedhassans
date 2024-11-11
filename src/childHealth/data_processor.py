@@ -29,10 +29,11 @@ class TrainDataProcessor:
 
     def _fill_numeric_missing_values(self):
         """Fill numeric columns with mean."""
-        numeric_cols = self.train_df[self.num_features]
-        numeric_cols = numeric_cols.apply(pd.to_numeric, errors='coerce')
+        numeric_cols = self.train_df[self.num_features].apply(pd.to_numeric, errors='coerce')
         imputer = SimpleImputer(strategy='mean')
-        self.train_df[self.num_features] = imputer.fit_transform(numeric_cols)
+        imputed_data = imputer.fit_transform(numeric_cols)
+        
+        self.train_df[self.num_features] = pd.DataFrame(imputed_data, columns=self.num_features, index=self.train_df.index)
 
     def _fill_categorical_missing_values(self):
         """Fill categorical columns with mode."""
