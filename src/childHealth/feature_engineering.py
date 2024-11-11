@@ -165,10 +165,10 @@ class ActigraphFileReader:
             logger.error("Error enabling change data feed for table %s: %s", table_name, e)
 
         # Step 4: Write data to the feature table if there is any
-        if feature_table.count() > 0:
-            try:
+        try:
+            if feature_table.count() > 0:
                 # Ensure consistent column names and types
-                feature_table = feature_table.withColumnRenamed("non-wear_flag", "non_wear_flag") \
+                feature_table = feature_table.withColumnRenamed("non-wear-flag", "non_wear_flag") \
                                              .withColumn("weekday", F.col("weekday").cast("TINYINT")) \
                                              .withColumn("quarter", F.col("quarter").cast("TINYINT")) \
                                              .withColumn("id", F.col("id").cast("STRING"))
@@ -179,8 +179,7 @@ class ActigraphFileReader:
                                    .option("mergeSchema", "true") \
                                    .saveAsTable(table_name)
                 logger.info("Feature table %s saved and updated successfully.", table_name)
-            except Exception as e:
-                logger.error("Error writing data to the feature table %s: %s", table_name, e)
-        else:
-            logger.info("Feature table is empty; nothing was saved.")
-
+            else:
+                logger.info("Feature table is empty; nothing was saved.")
+        except Exception as e:
+            logger.error("Error writing data to the feature table %s: %s", table_name, e)
