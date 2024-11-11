@@ -26,20 +26,32 @@ class TrainDataProcessor:
         """Handle missing values in the train dataset."""
         self._fill_numeric_missing_values()
         self._fill_categorical_missing_values()
-
+        
     def _fill_numeric_missing_values(self):
         """Fill numeric columns with mean."""
         try:
             numeric_cols = self.train_df[self.num_features].apply(pd.to_numeric, errors='coerce')
             imputer = SimpleImputer(strategy='mean')
-            imputed_data = imputer.fit_transform(numeric_cols)
+
+            # Identify and add any missing columns
+            missing_columns = set(self.num_features) - set(numeric_cols.columns)
+            if missing_columns:
+                for col in missing_columns:
+                    numeric_cols[col] = np.nan
             
-            # Ensure the imputed data has the same columns as the original DataFrame
+            # Ensure the columns in numeric_cols match the order in self.num_features
+            numeric_cols = numeric_cols[self.num_features]
+
+            # Impute and create a DataFrame
+            imputed_data = imputer.fit_transform(numeric_cols)
             imputed_df = pd.DataFrame(imputed_data, columns=self.num_features, index=self.train_df.index)
             self.train_df[self.num_features] = imputed_df
+
         except KeyError as e:
-            missing_cols = list(set(self.num_features) - set(self.train_df.columns))
-            print(f"Missing columns: {missing_cols}")
+            print(f"Missing columns: {missing_columns}")
+            raise e
+        except ValueError as e:
+            print(f"ValueError: {e}")
             raise e
 
     def _fill_categorical_missing_values(self):

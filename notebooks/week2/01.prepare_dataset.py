@@ -1,6 +1,6 @@
 # Databricks notebook source
 
-%pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl
+%pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
 
 
 # COMMAND ----------
@@ -19,6 +19,8 @@ warnings.filterwarnings("ignore")
 
 # Initialize Spark session
 spark = SparkSession.builder.getOrCreate()
+
+
 
 # COMMAND ----------
 
@@ -47,4 +49,6 @@ train_set, test_set = data_processor.split_data()
 
 # Save the processed datasets to the catalog
 data_processor.save_to_catalog(train_set=train_set, test_set=test_set, spark=spark)
+
+
 # COMMAND ----------

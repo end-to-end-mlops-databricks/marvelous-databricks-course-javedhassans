@@ -4,17 +4,17 @@
 catalog_name: "mlops_students"
 schema_name: "javedhassi"
 
-# Parameters for data processing
-data_cleaning_parameters:
-  drop_threshold: 0.8  # Threshold for dropping columns with missing values
-  lower_bound: 0.05    # Lower quantile bound for outlier detection
-  upper_bound: 0.95    # Upper quantile bound for outlier detection
-
 # Parameters for model training
 model_parameters:
   learning_rate: 0.01  # Learning rate for the model
   n_estimators: 1000   # Number of trees in the model
   max_depth: 6         # Maximum depth of the tree
+
+pipeline_steps:
+  feature_engineering: true
+  scaling: true
+  handle_outliers: true
+  handle_missing_values: true
 
 # Numerical features
 num_features:
@@ -86,7 +86,7 @@ num_features:
   - PCIAT-PCIAT_Total
   - SDS-SDS_Total_Raw  # Sleep Disturbance Scale (SDS) Total Raw
   - SDS-SDS_Total_T    # Sleep Disturbance Scale (SDS) Total T
-  - PreInt_EduHx-Season
+  # - PreInt_EduHx-Season
   - PreInt_EduHx-computerinternet_hoursday 
 
 # Categorical features
