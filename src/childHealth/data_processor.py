@@ -12,9 +12,9 @@ class TrainDataProcessor:
     def __init__(self, train_df: pd.DataFrame, config: ProjectConfig):
         self.train_df = train_df
         self.config = config
-        self.num_features = self.config.num_features
-        self.cat_features = self.config.cat_features
-        self.target = self.config.target
+        self.num_features = config.num_features
+        self.cat_features = config.cat_features
+        self.target = config.target
 
     def preprocess_data(self):
         """Preprocess the train dataset by handling missing values and data type conversions."""
@@ -24,18 +24,27 @@ class TrainDataProcessor:
 
     def handle_missing_values(self):
         """Handle missing values in the train dataset."""
-        # Fill numeric columns with mean
+        self._fill_numeric_missing_values()
+        self._fill_categorical_missing_values()
+
+    def _fill_numeric_missing_values(self):
+        """Fill numeric columns with mean."""
         numeric_cols = self.train_df[self.num_features]
+        numeric_cols = numeric_cols.apply(pd.to_numeric, errors='coerce')
         imputer = SimpleImputer(strategy='mean')
         self.train_df[self.num_features] = imputer.fit_transform(numeric_cols)
 
-        # Fill categorical columns with mode
+    def _fill_categorical_missing_values(self):
+        """Fill categorical columns with mode."""
         for col in self.cat_features:
             self.train_df[col].fillna(self.train_df[col].mode()[0], inplace=True)
 
     def convert_data_types(self):
         """Convert categorical columns to appropriate data types."""
-        # Convert 'Sex' to binary encoding if it's part of numerical features
+        self._convert_sex_to_binary()
+
+    def _convert_sex_to_binary(self):
+        """Convert 'Sex' to binary encoding if it's part of numerical features."""
         if 'Basic_Demos-Sex' in self.num_features:
             self.train_df['Basic_Demos-Sex'] = self.train_df['Basic_Demos-Sex'].map({'Male': 1, 'Female': 0})
 
@@ -61,21 +70,31 @@ class TrainDataProcessor:
 
     def calculate_behavioral_scores(self):
         """Calculate behavioral and psychological indicators."""
-        # Bin PCIAT total score
+        self._bin_pciat_total_score()
+        self._categorize_internet_use()
+
+    def _bin_pciat_total_score(self):
+        """Bin PCIAT total score."""
         if 'PCIAT-PCIAT_Total' in self.num_features:
             self.train_df['PCIAT_Bin'] = pd.cut(self.train_df['PCIAT-PCIAT_Total'], bins=[0, 20, 40, 60], labels=['Mild', 'Moderate', 'Severe'])
 
-        # Categorize internet use
+    def _categorize_internet_use(self):
+        """Categorize internet use."""
         if 'PreInt_EduHx-computerinternet_hoursday' in self.num_features:
             self.train_df['Internet_Use_Category'] = pd.cut(self.train_df['PreInt_EduHx-computerinternet_hoursday'], bins=[0, 1, 3, 6, np.inf], labels=['Low', 'Moderate', 'High', 'Very High'])
 
     def add_interaction_features(self):
         """Add interaction features, such as age-adjusted scores."""
-        # Age-adjusted CGAS Score
+        self._add_age_adjusted_cgas()
+        self._add_bmi_categories()
+
+    def _add_age_adjusted_cgas(self):
+        """Add age-adjusted CGAS Score."""
         if 'CGAS-CGAS_Score' in self.num_features and 'Basic_Demos-Age' in self.num_features:
             self.train_df['Age_Adjusted_CGAS'] = self.train_df['CGAS-CGAS_Score'] / self.train_df['Basic_Demos-Age']
 
-        # BMI Categories
+    def _add_bmi_categories(self):
+        """Add BMI Categories."""
         if 'Physical-BMI' in self.num_features:
             self.train_df['BMI_Category'] = pd.cut(self.train_df['Physical-BMI'], bins=[0, 18.5, 25, 30, np.inf], labels=['Underweight', 'Normal', 'Overweight', 'Obese'])
 
@@ -126,24 +145,19 @@ class TrainDataProcessor:
         test_set (pd.DataFrame): The test set.
         spark (SparkSession): The Spark session.
         """
-        # Add timestamp column to train and test sets
-        train_set_with_timestamp = spark.createDataFrame(train_set).withColumn(
+        self._add_timestamp_and_save(train_set, 'train_set', spark)
+        self._add_timestamp_and_save(test_set, 'test_set', spark)
+        self._enable_change_data_feed(spark)
+
+    def _add_timestamp_and_save(self, df: pd.DataFrame, table_name: str, spark: SparkSession):
+        """Add timestamp column and save DataFrame to Databricks table."""
+        df_with_timestamp = spark.createDataFrame(df).withColumn(
             "update_timestamp_utc", to_utc_timestamp(current_timestamp(), "UTC"))
+        df_with_timestamp.write.mode("append").saveAsTable(
+            f"{self.config.catalog_name}.{self.config.schema_name}.{table_name}")
 
-        test_set_with_timestamp = spark.createDataFrame(test_set).withColumn(
-            "update_timestamp_utc", to_utc_timestamp(current_timestamp(), "UTC"))
-
-        # Save train set to Databricks table
-        train_set_with_timestamp.write.mode("append").saveAsTable(
-            f"{self.config.catalog_name}.{self.config.schema_name}.train_set")
-
-        # Save test set to Databricks table
-        test_set_with_timestamp.write.mode("append").saveAsTable(
-            f"{self.config.catalog_name}.{self.config.schema_name}.test_set")
-
-        # Enable Change Data Feed for train and test sets
-        spark.sql(f"ALTER TABLE {self.config.catalog_name}.{self.config.schema_name}.train_set "
-                  "SET TBLPROPERTIES (delta.enableChangeDataFeed = true);")
-
-        spark.sql(f"ALTER TABLE {self.config.catalog_name}.{self.config.schema_name}.test_set "
-                  "SET TBLPROPERTIES (delta.enableChangeDataFeed = true);")
+    def _enable_change_data_feed(self, spark: SparkSession):
+        """Enable Change Data Feed for train and test sets."""
+        for table in ['train_set', 'test_set']:
+            spark.sql(f"ALTER TABLE {self.config.catalog_name}.{self.config.schema_name}.{table} "
+                      "SET TBLPROPERTIES (delta.enableChangeDataFeed = true);")
