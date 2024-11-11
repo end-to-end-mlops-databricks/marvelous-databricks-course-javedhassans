@@ -11,19 +11,9 @@ dbutils.library.restartPython()
 
 from pyspark.sql import SparkSession
 from childHealth.config import ProjectConfig
-from childHealth.feature_engineering import ActigraphAggregation
-from datetime import datetime
-from databricks.sdk import WorkspaceClient
-from databricks import feature_engineering
-
-
+from childHealth.feature_engineering import ActigraphFileReader
 import warnings
 warnings.filterwarnings("ignore")
-
-# Initialize Spark session
-spark = SparkSession.builder.getOrCreate()
-
-
 
 # COMMAND ----------
 
@@ -32,23 +22,11 @@ config = ProjectConfig.from_yaml(config_path="../../project_config.yml")
 
 
 # COMMAND ----------
-
-# create feature table for artigraph tables
-
-# Initialize the Databricks session and clients
-spark = SparkSession.builder.getOrCreate()
-workspace = WorkspaceClient()
-fe = feature_engineering.FeatureEngineeringClient()
-
-
+Actigraph = ActigraphFileReader(
+    app_name = "ActigraphAggregation",
+                     root_dir = "/Volumes/mlops_students/javedhassi/data/series_train.parquet/",
+                     catalog_name = config.catalog_name,
+                     schema_name = config.schema_name)
 # COMMAND ----------
-aggregator = ActigraphAggregation(
-                     root_dir = "/Volumes/mlops_students/javedhassi/data/series_test.parquet/",
-                     config = config)
-
-
-
-
-# COMMAND ----------
-feature_table = aggregator.process_all_participants()
+Actigraph.save_feature_table()
 # COMMAND ----------
