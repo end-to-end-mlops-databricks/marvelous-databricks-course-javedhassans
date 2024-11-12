@@ -5,10 +5,14 @@ catalog_name: "mlops_students"
 schema_name: "javedhassi"
 
 # Parameters for model training
-model_parameters:
-  learning_rate: 0.01  # Learning rate for the model
-  n_estimators: 1000   # Number of trees in the model
-  max_depth: 6         # Maximum depth of the tree
+# Set up Random Forest parameters
+random_forest_parameters:
+  n_estimators: 200         # Number of trees in the forest
+  max_depth: 10             # Maximum depth of each tree
+  min_samples_split: 5      # Minimum number of samples required to split a node
+  min_samples_leaf: 2       # Minimum number of samples required at each leaf node
+  class_weight: balanced    # Automatically balance classes
+  random_state: 42    
 
 pipeline_steps:
   feature_engineering: true

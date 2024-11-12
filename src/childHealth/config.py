@@ -5,7 +5,7 @@ import yaml
 class ProjectConfig(BaseModel):
     catalog_name: str
     schema_name: str
-    model_parameters: Dict[str, Any]  # Dictionary to hold model-related parameters
+    random_forest_parameters: Dict[str, Any]  # Dictionary to hold model-related parameters
     num_features: List[str]
     cat_features: List[str]
     target: str
