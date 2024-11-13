@@ -155,7 +155,7 @@ if battery_voltage_mean is None:
     return None
 else:
     return battery_voltage_mean * 1.2
-)
+
 $$
 """)
 
@@ -215,8 +215,8 @@ testing_df = testing_set.load_df().toPandas()
 # Split features and target
 X_train = training_df[num_features + cat_features + ["battery_voltage_mean_moving_avg"]]
 y_train = training_df[target]
-X_test = test_set[num_features + cat_features + ["battery_voltage_mean_moving_avg"]]
-y_test = test_set[target]
+X_test = testing_df[num_features + cat_features + ["battery_voltage_mean_moving_avg"]]
+y_test = testing_df[target]
 
 # COMMAND ----------
 
