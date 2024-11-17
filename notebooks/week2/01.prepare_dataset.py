@@ -1,26 +1,26 @@
 # Databricks notebook source
 
-#MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
+# MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
 
 
 # COMMAND ----------
 
-#MAGIC dbutils.library.restartPython()
+# MAGIC dbutils.library.restartPython()
 
 
 # COMMAND ----------
-
-from pyspark.sql import SparkSession
-from childHealth.config import ProjectConfig
-from childHealth.data_processor import TrainDataProcessor
-from datetime import datetime
 
 import warnings
+
+from pyspark.sql import SparkSession
+
+from childHealth.config import ProjectConfig
+from childHealth.data_processor import TrainDataProcessor
+
 warnings.filterwarnings("ignore")
 
 # Initialize Spark session
 spark = SparkSession.builder.getOrCreate()
-
 
 
 # COMMAND ----------
@@ -31,11 +31,7 @@ config = ProjectConfig.from_yaml(config_path="../../project_config.yml")
 # COMMAND ----------
 
 # Load the child health dataset into a Pandas DataFrame
-df = spark.read.csv(
-    "/Volumes/mlops_students/javedhassi/data/childHealth.csv", 
-    header=True, 
-    inferSchema=True
-).toPandas()
+df = spark.read.csv("/Volumes/mlops_students/javedhassi/data/childHealth.csv", header=True, inferSchema=True).toPandas()
 
 # COMMAND ----------
 

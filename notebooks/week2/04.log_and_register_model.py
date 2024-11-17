@@ -1,25 +1,26 @@
 # Databricks notebook source
 
-#MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
+# MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
 
 # COMMAND ----------
-#MAGIC dbutils.library.restartPython()
+# MAGIC dbutils.library.restartPython()
 
 # Databricks notebook source
 # Import necessary libraries
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
-from childHealth.config import ProjectConfig
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.metrics import classification_report, accuracy_score
 import mlflow
 from mlflow.models import infer_signature
 from pyspark.sql import SparkSession
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from childHealth.config import ProjectConfig
 
 # Set up MLflow tracking
 mlflow.set_tracking_uri("databricks")
-mlflow.set_registry_uri('databricks-uc')  # For registering models to Unity Catalog
+mlflow.set_registry_uri("databricks-uc")  # For registering models to Unity Catalog
 
 
 # COMMAND ----------
@@ -51,22 +52,21 @@ y_test = test_set[target]
 # Define preprocessing for numerical and categorical features
 preprocessor = ColumnTransformer(
     transformers=[
-        ('num', StandardScaler(), num_features),
-        ('cat', OneHotEncoder(handle_unknown='ignore'), cat_features)
+        ("num", StandardScaler(), num_features),
+        ("cat", OneHotEncoder(handle_unknown="ignore"), cat_features),
     ],
-    remainder='passthrough'
+    remainder="passthrough",
 )
 
 # Create the pipeline with preprocessing and Random Forest Classifier
-pipeline = Pipeline(steps=[
-    ('preprocessor', preprocessor),
-    ('classifier', RandomForestClassifier(**random_forest_parameters))
-])
+pipeline = Pipeline(
+    steps=[("preprocessor", preprocessor), ("classifier", RandomForestClassifier(**random_forest_parameters))]
+)
 
 
 # COMMAND ----------
 # Define the MLflow experiment and Git SHA for tracking
-mlflow.set_experiment(experiment_name='/Shared/child-health')
+mlflow.set_experiment(experiment_name="/Shared/child-health")
 git_sha = "830c17d988742482b639aec763ec731ac2dd4da5"
 
 # Start an MLflow run to track the training process
@@ -91,22 +91,17 @@ with mlflow.start_run(tags={"git_sha": git_sha, "branch": "week1-2"}) as run:
     signature = infer_signature(model_input=X_train, model_output=y_pred)
 
     # Log the dataset source and model in MLflow
-    dataset = mlflow.data.from_spark(
-        train_set_spark, table_name=f"{catalog_name}.{schema_name}.train_set", version="0")
+    dataset = mlflow.data.from_spark(train_set_spark, table_name=f"{catalog_name}.{schema_name}.train_set", version="0")
     mlflow.log_input(dataset, context="training")
 
-    mlflow.sklearn.log_model(
-        sk_model=pipeline,
-        artifact_path="randomforest-pipeline-model",
-        signature=signature
-    )
-    
+    mlflow.sklearn.log_model(sk_model=pipeline, artifact_path="randomforest-pipeline-model", signature=signature)
+
 # COMMAND ----------
 # Register the model in MLflow
 model_version = mlflow.register_model(
-    model_uri=f'runs:/{run_id}/randomforest-pipeline-model',
+    model_uri=f"runs:/{run_id}/randomforest-pipeline-model",
     name=f"{catalog_name}.{schema_name}.child_health_model_randomforest",
-    tags={"git_sha": git_sha}
+    tags={"git_sha": git_sha},
 )
 
 # COMMAND ----------

@@ -1,60 +1,60 @@
-from pyspark.sql.types import StructType, StructField, StringType, FloatType, IntegerType, LongType
-import os
-from datetime import datetime
-from typing import Optional, List
-from concurrent.futures import ThreadPoolExecutor, as_completed
-
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
-from pyspark.sql import SparkSession, DataFrame, functions as F
-from pyspark.sql.functions import current_timestamp, to_utc_timestamp
-from pyspark.dbutils import DBUtils
-
-from childHealth.config import ProjectConfig
-from databricks.feature_engineering import FeatureFunction, FeatureLookup
-
 import logging
-from pyspark.sql.utils import AnalysisException
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import List, Optional
 
+from pyspark.dbutils import DBUtils
+from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import functions as F
+from pyspark.sql.types import FloatType, IntegerType, LongType, StringType, StructField, StructType
+from pyspark.sql.utils import AnalysisException
+from tqdm import tqdm
 
 # Configure the logger
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
 
 class ActigraphFileReader:
     def __init__(self, app_name: str, root_dir: str, catalog_name: str, schema_name: str):
         """
         Initializes the ActigraphFileReader class.
         """
-        self.spark = SparkSession.builder \
-            .appName(app_name) \
-            .config("spark.databricks.delta.schema.autoMerge.enabled", "true") \
+        self.spark = (
+            SparkSession.builder.appName(app_name)
+            .config("spark.databricks.delta.schema.autoMerge.enabled", "true")
             .getOrCreate()
+        )
         self.dbutils = DBUtils(self.spark)
         self.root_dir = root_dir
         self.catalog_name = catalog_name
         self.schema_name = schema_name
 
         # Define the schema for the feature table
-        self.schema = StructType([
-            StructField("step", LongType(), True),
-            StructField("X", FloatType(), True),
-            StructField("Y", FloatType(), True),
-            StructField("Z", FloatType(), True),
-            StructField("enmo", FloatType(), True),
-            StructField("anglez", FloatType(), True),
-            StructField("non_wear_flag", FloatType(), True),
-            StructField("light", FloatType(), True),
-            StructField("battery_voltage", FloatType(), True),
-            StructField("time_of_day", LongType(), True),
-            StructField("weekday", IntegerType(), True),
-            StructField("quarter", IntegerType(), True),
-            StructField("relative_date_PCIAT", FloatType(), True),
-            StructField("id", StringType(), True),
-        ])
-        logger.info("Initialized ActigraphFileReader with app name %s, root directory %s, catalog %s, and schema %s.",
-                    app_name, root_dir, catalog_name, schema_name)
+        self.schema = StructType(
+            [
+                StructField("step", LongType(), True),
+                StructField("X", FloatType(), True),
+                StructField("Y", FloatType(), True),
+                StructField("Z", FloatType(), True),
+                StructField("enmo", FloatType(), True),
+                StructField("anglez", FloatType(), True),
+                StructField("non_wear_flag", FloatType(), True),
+                StructField("light", FloatType(), True),
+                StructField("battery_voltage", FloatType(), True),
+                StructField("time_of_day", LongType(), True),
+                StructField("weekday", IntegerType(), True),
+                StructField("quarter", IntegerType(), True),
+                StructField("relative_date_PCIAT", FloatType(), True),
+                StructField("id", StringType(), True),
+            ]
+        )
+        logger.info(
+            "Initialized ActigraphFileReader with app name %s, root directory %s, catalog %s, and schema %s.",
+            app_name,
+            root_dir,
+            catalog_name,
+            schema_name,
+        )
 
     def _read_participant_file(self, file_path: str, participant_id: str) -> Optional[DataFrame]:
         """
@@ -66,7 +66,9 @@ class ActigraphFileReader:
             logger.info("Successfully read file for participant ID: %s from path: %s", participant_id, file_path)
             return data
         except AnalysisException as e:
-            logger.warning("File not found or error reading file %s for participant %s: %s", file_path, participant_id, e)
+            logger.warning(
+                "File not found or error reading file %s for participant %s: %s", file_path, participant_id, e
+            )
             return None
         except Exception as e:
             logger.error("Unexpected error reading file %s for participant %s: %s", file_path, participant_id, e)
@@ -87,10 +89,10 @@ class ActigraphFileReader:
                 return None
 
             for dir_info in participant_dirs:
-                if not dir_info.path.endswith('/'):
+                if not dir_info.path.endswith("/"):
                     continue  # Skip if it's not a directory
 
-                participant_id = dir_info.path.split('=')[-1].strip('/')
+                participant_id = dir_info.path.split("=")[-1].strip("/")
                 participant_file_path = f"{dir_info.path}part-0.parquet"
                 futures.append(executor.submit(self._read_participant_file, participant_file_path, participant_id))
 
@@ -168,16 +170,15 @@ class ActigraphFileReader:
         try:
             if feature_table.count() > 0:
                 # Ensure consistent column names and types
-                feature_table = feature_table.withColumnRenamed("non-wear-flag", "non_wear_flag") \
-                                             .withColumn("weekday", F.col("weekday").cast("TINYINT")) \
-                                             .withColumn("quarter", F.col("quarter").cast("TINYINT")) \
-                                             .withColumn("id", F.col("id").cast("STRING"))
+                feature_table = (
+                    feature_table.withColumnRenamed("non-wear-flag", "non_wear_flag")
+                    .withColumn("weekday", F.col("weekday").cast("TINYINT"))
+                    .withColumn("quarter", F.col("quarter").cast("TINYINT"))
+                    .withColumn("id", F.col("id").cast("STRING"))
+                )
 
                 # Write data with schema merge enabled
-                feature_table.write.format("delta") \
-                                   .mode("append") \
-                                   .option("mergeSchema", "true") \
-                                   .saveAsTable(table_name)
+                feature_table.write.format("delta").mode("append").option("mergeSchema", "true").saveAsTable(table_name)
                 logger.info("Feature table %s saved and updated successfully.", table_name)
             else:
                 logger.info("Feature table is empty; nothing was saved.")

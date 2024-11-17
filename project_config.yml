@@ -12,7 +12,7 @@ random_forest_parameters:
   min_samples_split: 5      # Minimum number of samples required to split a node
   min_samples_leaf: 2       # Minimum number of samples required at each leaf node
   class_weight: balanced    # Automatically balance classes
-  random_state: 42   
+  random_state: 42
 
 # Set up LightGBM parameters
 lgb_parameters:
@@ -40,7 +40,7 @@ pipeline_steps:
 logging:
   level: INFO
   file: logs/data_processor.log
-  
+
 
 # Numerical features
 num_features:
@@ -92,7 +92,7 @@ num_features:
   - PCIAT-PCIAT_02
   - PCIAT-PCIAT_03
   - PCIAT-PCIAT_04
-  - PCIAT-PCIAT_05 
+  - PCIAT-PCIAT_05
   - PCIAT-PCIAT_06
   - PCIAT-PCIAT_07
   - PCIAT-PCIAT_08
@@ -112,7 +112,7 @@ num_features:
   - SDS-SDS_Total_Raw  # Sleep Disturbance Scale (SDS) Total Raw
   - SDS-SDS_Total_T    # Sleep Disturbance Scale (SDS) Total T
   # - PreInt_EduHx-Season
-  - PreInt_EduHx-computerinternet_hoursday 
+  - PreInt_EduHx-computerinternet_hoursday
 
 # Categorical features
 cat_features:
@@ -126,7 +126,7 @@ cat_features:
   - PAQ_A-Season      # Physical Activity Questionnaire (PAQ) A Season
   - PAQ_C-Season      # Physical Activity Questionnaire (PAQ) C Season
   - PCIAT-Season      # PCIAT-Season
-  - SDS-Season      # Sleep Disturbance Scale (SDS) Season  
+  - SDS-Season      # Sleep Disturbance Scale (SDS) Season
 
 # Target column
 target: sii

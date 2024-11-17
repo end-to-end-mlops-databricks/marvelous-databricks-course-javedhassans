@@ -1,18 +1,18 @@
-import pandas as pd
-import numpy as np
-from childHealth.config import ProjectConfig
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.impute import SimpleImputer
-from pyspark.sql.functions import current_timestamp, to_utc_timestamp
-from pyspark.sql import SparkSession
+import logging
 import os
 
-import logging
+import numpy as np
+import pandas as pd
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import current_timestamp, to_utc_timestamp
+from sklearn.impute import SimpleImputer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
+from childHealth.config import ProjectConfig
 
 # Load configuration
-config = ProjectConfig.from_yaml('../../project_config.yml')
+config = ProjectConfig.from_yaml("../../project_config.yml")
 
 # Create logs directory if it doesn't exist
 log_file = config.logging.file
@@ -21,15 +21,16 @@ os.makedirs(os.path.dirname(log_file), exist_ok=True)
 # Configure logging
 logging.basicConfig(
     level=getattr(logging, config.logging.level),
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
         logging.FileHandler(log_file),
-        logging.StreamHandler()  # This will also print logs to the console
-    ]
+        logging.StreamHandler(),  # This will also print logs to the console
+    ],
 )
 
 # Set up logging configuration
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 class TrainDataProcessor:
     def __init__(self, train_df: pd.DataFrame, config: ProjectConfig):
@@ -57,8 +58,8 @@ class TrainDataProcessor:
     def _fill_numeric_missing_values(self):
         """Fill numeric columns with mean."""
         try:
-            numeric_cols = self.train_df[self.num_features].apply(pd.to_numeric, errors='coerce')
-            imputer = SimpleImputer(strategy='mean')
+            numeric_cols = self.train_df[self.num_features].apply(pd.to_numeric, errors="coerce")
+            imputer = SimpleImputer(strategy="mean")
 
             # Identify and add any missing columns
             missing_columns = set(self.num_features) - set(numeric_cols.columns)
@@ -97,10 +98,10 @@ class TrainDataProcessor:
 
     def _convert_sex_to_binary(self):
         """Convert 'Sex' to binary encoding if it's part of numerical features and not already binary encoded."""
-        if 'Basic_Demos-Sex' in self.cat_features:
+        if "Basic_Demos-Sex" in self.cat_features:
             # Map the values to binary encoding
-            self.train_df['Basic_Demos-Sex'] = self.train_df['Basic_Demos-Sex'].map({1.0: 'Male', 0.0:'Female'})
-            logging.info("Converted 'Basic_Demos-Sex' to binary")   
+            self.train_df["Basic_Demos-Sex"] = self.train_df["Basic_Demos-Sex"].map({1.0: "Male", 0.0: "Female"})
+            logging.info("Converted 'Basic_Demos-Sex' to binary")
 
     def feature_engineering(self):
         """Perform feature engineering to create new features."""
@@ -115,15 +116,17 @@ class TrainDataProcessor:
     def add_age_groups(self):
         """Add age groups based on age."""
         logging.info("Adding age groups")
-        if 'Basic_Demos-Age' in self.num_features:
-            self.train_df['Age_Group'] = pd.cut(self.train_df['Basic_Demos-Age'], bins=[0, 12, 17, 25], labels=['Child', 'Teen', 'Young Adult'])
+        if "Basic_Demos-Age" in self.num_features:
+            self.train_df["Age_Group"] = pd.cut(
+                self.train_df["Basic_Demos-Age"], bins=[0, 12, 17, 25], labels=["Child", "Teen", "Young Adult"]
+            )
             logging.info("Age groups added")
 
     def one_hot_encode_seasons(self):
         """One-hot encode season columns."""
         logging.info("One-hot encoding seasons")
         for col in self.cat_features:
-            if 'Season' in col:
+            if "Season" in col:
                 one_hot = pd.get_dummies(self.train_df[col], prefix=col)
                 self.train_df = pd.concat([self.train_df, one_hot], axis=1)
                 logging.info(f"One-hot encoded {col}")
@@ -132,26 +135,36 @@ class TrainDataProcessor:
         """Calculate behavioral and psychological indicators."""
         logging.info("Calculating behavioral scores")
         # Bin PCIAT total score
-        if 'PCIAT-PCIAT_Total' in self.num_features:
-            self.train_df['PCIAT_Bin'] = pd.cut(self.train_df['PCIAT-PCIAT_Total'], bins=[0, 20, 40, 60], labels=['Mild', 'Moderate', 'Severe'])
+        if "PCIAT-PCIAT_Total" in self.num_features:
+            self.train_df["PCIAT_Bin"] = pd.cut(
+                self.train_df["PCIAT-PCIAT_Total"], bins=[0, 20, 40, 60], labels=["Mild", "Moderate", "Severe"]
+            )
             logging.info("PCIAT total score binned")
 
         # Categorize internet use
-        if 'PreInt_EduHx-computerinternet_hoursday' in self.num_features:
-            self.train_df['Internet_Use_Category'] = pd.cut(self.train_df['PreInt_EduHx-computerinternet_hoursday'], bins=[0, 1, 3, 6, np.inf], labels=['Low', 'Moderate', 'High', 'Very High'])
+        if "PreInt_EduHx-computerinternet_hoursday" in self.num_features:
+            self.train_df["Internet_Use_Category"] = pd.cut(
+                self.train_df["PreInt_EduHx-computerinternet_hoursday"],
+                bins=[0, 1, 3, 6, np.inf],
+                labels=["Low", "Moderate", "High", "Very High"],
+            )
             logging.info("Internet use categorized")
 
     def add_interaction_features(self):
         """Add interaction features, such as age-adjusted scores."""
         logging.info("Adding interaction features")
         # Age-adjusted CGAS Score
-        if 'CGAS-CGAS_Score' in self.num_features and 'Basic_Demos-Age' in self.num_features:
-            self.train_df['Age_Adjusted_CGAS'] = self.train_df['CGAS-CGAS_Score'] / self.train_df['Basic_Demos-Age']
+        if "CGAS-CGAS_Score" in self.num_features and "Basic_Demos-Age" in self.num_features:
+            self.train_df["Age_Adjusted_CGAS"] = self.train_df["CGAS-CGAS_Score"] / self.train_df["Basic_Demos-Age"]
             logging.info("Age-adjusted CGAS score added")
 
         # BMI Categories
-        if 'Physical-BMI' in self.num_features:
-            self.train_df['BMI_Category'] = pd.cut(self.train_df['Physical-BMI'], bins=[0, 18.5, 25, 30, np.inf], labels=['Underweight', 'Normal', 'Overweight', 'Obese'])
+        if "Physical-BMI" in self.num_features:
+            self.train_df["BMI_Category"] = pd.cut(
+                self.train_df["Physical-BMI"],
+                bins=[0, 18.5, 25, 30, np.inf],
+                labels=["Underweight", "Normal", "Overweight", "Obese"],
+            )
             logging.info("BMI categories added")
 
     def scale_numeric_features(self):
@@ -194,8 +207,8 @@ class TrainDataProcessor:
 
     def save_to_catalog(self, train_set: pd.DataFrame, test_set: pd.DataFrame, spark: SparkSession):
         logging.info("Saving datasets to catalog")
-        self._add_timestamp_and_save(train_set, 'train_set', spark)
-        self._add_timestamp_and_save(test_set, 'test_set', spark)
+        self._add_timestamp_and_save(train_set, "train_set", spark)
+        self._add_timestamp_and_save(test_set, "test_set", spark)
         self._enable_change_data_feed(spark)
         logging.info("Datasets saved to catalog and change data feed enabled")
 
