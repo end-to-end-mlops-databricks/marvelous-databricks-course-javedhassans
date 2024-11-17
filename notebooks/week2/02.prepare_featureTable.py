@@ -1,11 +1,11 @@
 # Databricks notebook source
 
-# %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
+#MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl --force-reinstall
 
 
 # COMMAND ----------
 
-dbutils.library.restartPython()
+#MAGIC dbutils.library.restartPython()
 
 # COMMAND ----------
 

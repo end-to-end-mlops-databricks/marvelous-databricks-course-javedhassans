@@ -6,9 +6,27 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from pyspark.sql.functions import current_timestamp, to_utc_timestamp
 from pyspark.sql import SparkSession
+import os
 
 import logging
 
+
+# Load configuration
+config = ProjectConfig.from_yaml('../../project_config.yml')
+
+# Create logs directory if it doesn't exist
+log_file = config.logging.file
+os.makedirs(os.path.dirname(log_file), exist_ok=True)
+
+# Configure logging
+logging.basicConfig(
+    level=getattr(logging, config.logging.level),
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_file),
+        logging.StreamHandler()  # This will also print logs to the console
+    ]
+)
 
 # Set up logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -78,10 +96,11 @@ class TrainDataProcessor:
         self._convert_sex_to_binary()
 
     def _convert_sex_to_binary(self):
-        """Convert 'Sex' to binary encoding if it's part of numerical features."""
-        if 'Basic_Demos-Sex' in self.num_features:
-            self.train_df['Basic_Demos-Sex'] = self.train_df['Basic_Demos-Sex'].map({'Male': 1, 'Female': 0})
-            logging.info("Converted 'Basic_Demos-Sex' to binary")
+        """Convert 'Sex' to binary encoding if it's part of numerical features and not already binary encoded."""
+        if 'Basic_Demos-Sex' in self.cat_features:
+            # Map the values to binary encoding
+            self.train_df['Basic_Demos-Sex'] = self.train_df['Basic_Demos-Sex'].map({1.0: 'Male', 0.0:'Female'})
+            logging.info("Converted 'Basic_Demos-Sex' to binary")   
 
     def feature_engineering(self):
         """Perform feature engineering to create new features."""
@@ -93,7 +112,68 @@ class TrainDataProcessor:
         logging.info("Feature engineering completed")
         return self.train_df
 
-    # Rest of the methods...
+    def add_age_groups(self):
+        """Add age groups based on age."""
+        logging.info("Adding age groups")
+        if 'Basic_Demos-Age' in self.num_features:
+            self.train_df['Age_Group'] = pd.cut(self.train_df['Basic_Demos-Age'], bins=[0, 12, 17, 25], labels=['Child', 'Teen', 'Young Adult'])
+            logging.info("Age groups added")
+
+    def one_hot_encode_seasons(self):
+        """One-hot encode season columns."""
+        logging.info("One-hot encoding seasons")
+        for col in self.cat_features:
+            if 'Season' in col:
+                one_hot = pd.get_dummies(self.train_df[col], prefix=col)
+                self.train_df = pd.concat([self.train_df, one_hot], axis=1)
+                logging.info(f"One-hot encoded {col}")
+
+    def calculate_behavioral_scores(self):
+        """Calculate behavioral and psychological indicators."""
+        logging.info("Calculating behavioral scores")
+        # Bin PCIAT total score
+        if 'PCIAT-PCIAT_Total' in self.num_features:
+            self.train_df['PCIAT_Bin'] = pd.cut(self.train_df['PCIAT-PCIAT_Total'], bins=[0, 20, 40, 60], labels=['Mild', 'Moderate', 'Severe'])
+            logging.info("PCIAT total score binned")
+
+        # Categorize internet use
+        if 'PreInt_EduHx-computerinternet_hoursday' in self.num_features:
+            self.train_df['Internet_Use_Category'] = pd.cut(self.train_df['PreInt_EduHx-computerinternet_hoursday'], bins=[0, 1, 3, 6, np.inf], labels=['Low', 'Moderate', 'High', 'Very High'])
+            logging.info("Internet use categorized")
+
+    def add_interaction_features(self):
+        """Add interaction features, such as age-adjusted scores."""
+        logging.info("Adding interaction features")
+        # Age-adjusted CGAS Score
+        if 'CGAS-CGAS_Score' in self.num_features and 'Basic_Demos-Age' in self.num_features:
+            self.train_df['Age_Adjusted_CGAS'] = self.train_df['CGAS-CGAS_Score'] / self.train_df['Basic_Demos-Age']
+            logging.info("Age-adjusted CGAS score added")
+
+        # BMI Categories
+        if 'Physical-BMI' in self.num_features:
+            self.train_df['BMI_Category'] = pd.cut(self.train_df['Physical-BMI'], bins=[0, 18.5, 25, 30, np.inf], labels=['Underweight', 'Normal', 'Overweight', 'Obese'])
+            logging.info("BMI categories added")
+
+    def scale_numeric_features(self):
+        """Scale numeric features in the final dataset."""
+        logging.info("Scaling numeric features")
+        scaler = StandardScaler()
+        self.train_df[self.num_features] = scaler.fit_transform(self.train_df[self.num_features])
+        logging.info("Numeric features scaled")
+
+    def handle_missing_target(self):
+        """Handle missing values in the target column by replacing them with a specific value (e.g., 4.0)."""
+        logging.info("Handling missing target values")
+        new_value = 4.0  # New value to replace NaNs in the target column
+        self.train_df[self.target].fillna(new_value, inplace=True)
+        logging.info("Missing target values handled")
+
+    def keep_relevant_columns(self):
+        """Keep only relevant columns."""
+        logging.info("Keeping relevant columns")
+        relevant_columns = self.num_features + self.cat_features + [self.target]
+        self.train_df = self.train_df[relevant_columns]
+        logging.info("Relevant columns kept")
 
     def process(self):
         """Run the complete processing pipeline."""
@@ -118,3 +198,18 @@ class TrainDataProcessor:
         self._add_timestamp_and_save(test_set, 'test_set', spark)
         self._enable_change_data_feed(spark)
         logging.info("Datasets saved to catalog and change data feed enabled")
+
+    def _add_timestamp_and_save(self, df: pd.DataFrame, table_name: str, spark: SparkSession):
+        """Add timestamp and save DataFrame to catalog."""
+        logging.info(f"Adding timestamp and saving {table_name}")
+        spark_df = spark.createDataFrame(df)
+        spark_df = spark_df.withColumn("timestamp", to_utc_timestamp(current_timestamp(), "UTC"))
+        spark_df.write.format("delta").mode("overwrite").saveAsTable(table_name)
+        logging.info(f"{table_name} saved with timestamp")
+
+    def _enable_change_data_feed(self, spark: SparkSession):
+        """Enable change data feed for the catalog."""
+        logging.info("Enabling change data feed")
+        spark.sql("ALTER TABLE train_set SET TBLPROPERTIES (delta.enableChangeDataFeed = true)")
+        spark.sql("ALTER TABLE test_set SET TBLPROPERTIES (delta.enableChangeDataFeed = true)")
+        logging.info("Change data feed enabled")

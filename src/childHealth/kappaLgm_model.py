@@ -2,7 +2,7 @@ import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import classification_report, accuracy_score, cohen_kappa_score
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -10,10 +10,14 @@ from sklearn.pipeline import Pipeline
 import lightgbm as lgb
 from scipy.optimize import minimize
 import mlflow
+from childHealth.config import ProjectConfig
 
-def kappa_metric(y_true, y_pred):
-    y_pred = np.argmax(y_pred.reshape(len(y_true), -1), axis=1)
+def kappa_metric(y_true, y_pred_raw):
+    # Use rounding to convert predicted probabilities to the nearest class
+    y_pred = np.round(y_pred_raw).astype(int)
     return 'kappa', cohen_kappa_score(y_true, y_pred, weights='quadratic'), True
+
+
 
 class ChildHealthModel:
     def __init__(self, preprocessor, config):
@@ -24,26 +28,24 @@ class ChildHealthModel:
         :param config: A dictionary containing model parameters.
         """
         self.config = config
-        self.model = Pipeline(steps=[
-            ('preprocessor', preprocessor),
-            ('regressor', lgb.LGBMClassifier(
-                n_estimators=config['lgb_boosting_parameters']['n_estimators'],
-                max_depth=config['lgb_boosting_parameters']['max_depth'],
-                learning_rate=config['lgb_boosting_parameters']['learning_rate'],
-                objective=config['lgb_boosting_parameters']['objective'],
-                num_class=config['lgb_boosting_parameters']['num_class'],
-                boosting_type=config['lgb_boosting_parameters']['boosting_type'],
-                num_leaves=config['lgb_boosting_parameters']['num_leaves'],
-                min_data_in_leaf=config['lgb_boosting_parameters']['min_data_in_leaf'],
-                feature_fraction=config['lgb_boosting_parameters']['feature_fraction'],
-                bagging_fraction=config['lgb_boosting_parameters']['bagging_fraction'],
-                bagging_freq=config['lgb_boosting_parameters']['bagging_freq'],
-                lambda_l1=config['lgb_boosting_parameters']['lambda_l1'],
-                lambda_l2=config['lgb_boosting_parameters']['lambda_l2'],
-                random_state=42,
-                metric='None'  # Disable default metrics
-            ))
-        ])
+        self.preprocessor = preprocessor
+        self.model = lgb.LGBMClassifier(
+            learning_rate=config.lgb_parameters['learning_rate'],
+            max_depth=config.lgb_parameters['max_depth'],
+            num_leaves=config.lgb_parameters['num_leaves'],
+            min_data_in_leaf=config.lgb_parameters['min_data_in_leaf'],
+            feature_fraction=config.lgb_parameters['feature_fraction'],
+            bagging_fraction=config.lgb_parameters['bagging_fraction'],
+            bagging_freq=config.lgb_parameters['bagging_freq'],
+            lambda_l1=config.lgb_parameters['lambda_l1'],
+            lambda_l2=config.lgb_parameters['lambda_l2'],
+            n_estimators=config.lgb_parameters['n_estimators'],
+            num_class=config.lgb_parameters['num_class'],
+            objective=config.lgb_parameters['objective'],
+            boosting_type=config.lgb_parameters['boosting_type'],
+            random_state=42,
+            metric='None'  # Disable default metrics
+        )
         self.best_thresholds = [0.5, 1.5, 2.5, 3.5]  # Initial thresholds for rounding
 
     def quadratic_weighted_kappa(self, y_true, y_pred):
@@ -63,14 +65,31 @@ class ChildHealthModel:
         result = minimize(evaluate_thresholds, self.best_thresholds, method='Nelder-Mead')
         self.best_thresholds = result.x  # Update best thresholds after optimization
 
-    def train(self, X_train, y_train):
+    def train(self, X_train, y_train, X_val, y_val):
         """
         Train the model on the provided training data.
 
         :param X_train: Training features.
         :param y_train: Training target.
+        :param X_val: Validation features.
+        :param y_val: Validation target.
         """
-        self.model.named_steps['regressor'].fit(X_train, y_train, eval_metric=kappa_metric)
+        X_train = self.preprocessor.fit_transform(X_train)
+        X_val = self.preprocessor.transform(X_val)
+
+        # Using the LightGBM Dataset for early stopping support
+        train_data = lgb.Dataset(X_train, label=y_train)
+        val_data = lgb.Dataset(X_val, label=y_val, reference=train_data)
+
+        # Train with early stopping
+        self.model = lgb.train(
+            params=self.config.lgb_parameters,
+            train_set=train_data,
+            valid_sets=[val_data],
+            valid_names=['validation'],
+            feval=kappa_metric,
+            # early_stopping_rounds=10
+        )
 
     def predict(self, X):
         """
@@ -79,6 +98,7 @@ class ChildHealthModel:
         :param X: Features to predict.
         :return: Predictions.
         """
+        X = self.preprocessor.transform(X)
         return self.model.predict(X)
 
     def predict_proba(self, X):
@@ -88,6 +108,7 @@ class ChildHealthModel:
         :param X: Features to predict.
         :return: Predicted probabilities.
         """
+        X = self.preprocessor.transform(X)
         return self.model.predict_proba(X)
 
     def evaluate(self, X_test, y_test):
@@ -110,28 +131,27 @@ class ChildHealthModel:
 
         :return: Feature importances and feature names.
         """
-        feature_importance = self.model.named_steps['regressor'].feature_importances_
-        feature_names = self.model.named_steps['preprocessor'].get_feature_names_out()
+        feature_importance = self.model.feature_importances_
+        feature_names = self.preprocessor.get_feature_names_out()
         return feature_importance, feature_names
 
 # Main function
 if __name__ == "__main__":
     # Load configuration
     config_path = 'project_config.yml'
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
+    config = ProjectConfig.from_yaml(config_path)
 
     # Load and preprocess data
     train_path = 'train.csv'
     data = pd.read_csv(train_path)
-    X = data[config['num_features'] + config['cat_features']]
-    y = data[config['target']]
+    X = data[config.num_features + config.cat_features]
+    y = data[config.target]
 
     # Define preprocessor
     preprocessor = ColumnTransformer(
         transformers=[
-            ('num', StandardScaler(), config['num_features']),
-            ('cat', OneHotEncoder(drop='first'), config['cat_features'])
+            ('num', StandardScaler(), config.num_features),
+            ('cat', OneHotEncoder(drop='first'), config.cat_features)
         ]
     )
 
@@ -139,10 +159,11 @@ if __name__ == "__main__":
     child_health_model = ChildHealthModel(preprocessor, config)
 
     # Split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, stratify=y_temp, random_state=42)
 
     # Train model
-    child_health_model.train(X_train, y_train)
+    child_health_model.train(X_train, y_train, X_val, y_val)
 
     # Out-of-Fold predictions for threshold optimization
     oof_preds = child_health_model.predict_proba(X_test)
