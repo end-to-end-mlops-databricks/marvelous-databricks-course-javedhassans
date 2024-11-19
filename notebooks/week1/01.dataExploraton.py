@@ -14,9 +14,13 @@ import warnings
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
+from IPython import get_ipython
 from pyspark.sql import SparkSession
 
 from childHealth.config import ProjectConfig
+
+dbutils = get_ipython().user_ns["dbutils"]
+
 
 warnings.filterwarnings("ignore")
 

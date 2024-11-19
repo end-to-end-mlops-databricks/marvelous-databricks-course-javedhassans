@@ -20,12 +20,12 @@ class ProjectConfig(BaseModel):
             with open(config_path, "r") as f:
                 config_dict = yaml.safe_load(f)
             return cls(**config_dict)
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Configuration file not found: {config_path}")
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Configuration file not found: {config_path}") from e
         except yaml.YAMLError as e:
-            raise ValueError(f"Error parsing YAML file: {e}")
+            raise ValueError(f"Error parsing YAML file: {e}") from e
         except ValidationError as e:
-            raise ValueError(f"Validation error: {e}")
+            raise ValueError(f"Validation error: {e}") from e
 
 
 # Example usage:
