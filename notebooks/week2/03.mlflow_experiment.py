@@ -1,6 +1,6 @@
 # Databricks notebook source
 import json
-import subprocess
+
 import mlflow
 
 mlflow.set_tracking_uri("databricks")
@@ -19,12 +19,11 @@ print(experiments)
 # COMMAND ----------
 with open("mlflow_experiment.json", "w") as json_file:
     json.dump(experiments[0].__dict__, json_file, indent=4)
-    
+
 # COMMAND ----------
 with mlflow.start_run(
     run_name="demo-run",
-    tags={"git_sha": '830c17d988742482b639aec763ec731ac2dd4da5',
-          "branch": "week1-2"},
+    tags={"git_sha": "830c17d988742482b639aec763ec731ac2dd4da5", "branch": "week1-2"},
     description="demo run",
 ) as run:
     mlflow.log_params({"type": "demo"})

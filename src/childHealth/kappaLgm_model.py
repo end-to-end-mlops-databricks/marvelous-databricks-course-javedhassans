@@ -1,22 +1,21 @@
-import yaml
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.metrics import classification_report, accuracy_score, cohen_kappa_score
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.pipeline import Pipeline
 import lightgbm as lgb
-from scipy.optimize import minimize
+import matplotlib.pyplot as plt
 import mlflow
+import numpy as np
+import pandas as pd
+from scipy.optimize import minimize
+from sklearn.compose import ColumnTransformer
+from sklearn.metrics import accuracy_score, classification_report, cohen_kappa_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
 from childHealth.config import ProjectConfig
+
 
 def kappa_metric(y_true, y_pred_raw):
     # Use rounding to convert predicted probabilities to the nearest class
     y_pred = np.round(y_pred_raw).astype(int)
-    return 'kappa', cohen_kappa_score(y_true, y_pred, weights='quadratic'), True
-
+    return "kappa", cohen_kappa_score(y_true, y_pred, weights="quadratic"), True
 
 
 class ChildHealthModel:
@@ -30,39 +29,42 @@ class ChildHealthModel:
         self.config = config
         self.preprocessor = preprocessor
         self.model = lgb.LGBMClassifier(
-            learning_rate=config.lgb_parameters['learning_rate'],
-            max_depth=config.lgb_parameters['max_depth'],
-            num_leaves=config.lgb_parameters['num_leaves'],
-            min_data_in_leaf=config.lgb_parameters['min_data_in_leaf'],
-            feature_fraction=config.lgb_parameters['feature_fraction'],
-            bagging_fraction=config.lgb_parameters['bagging_fraction'],
-            bagging_freq=config.lgb_parameters['bagging_freq'],
-            lambda_l1=config.lgb_parameters['lambda_l1'],
-            lambda_l2=config.lgb_parameters['lambda_l2'],
-            n_estimators=config.lgb_parameters['n_estimators'],
-            num_class=config.lgb_parameters['num_class'],
-            objective=config.lgb_parameters['objective'],
-            boosting_type=config.lgb_parameters['boosting_type'],
+            learning_rate=config.lgb_parameters["learning_rate"],
+            max_depth=config.lgb_parameters["max_depth"],
+            num_leaves=config.lgb_parameters["num_leaves"],
+            min_data_in_leaf=config.lgb_parameters["min_data_in_leaf"],
+            feature_fraction=config.lgb_parameters["feature_fraction"],
+            bagging_fraction=config.lgb_parameters["bagging_fraction"],
+            bagging_freq=config.lgb_parameters["bagging_freq"],
+            lambda_l1=config.lgb_parameters["lambda_l1"],
+            lambda_l2=config.lgb_parameters["lambda_l2"],
+            n_estimators=config.lgb_parameters["n_estimators"],
+            num_class=config.lgb_parameters["num_class"],
+            objective=config.lgb_parameters["objective"],
+            boosting_type=config.lgb_parameters["boosting_type"],
             random_state=42,
-            metric='None'  # Disable default metrics
+            metric="None",  # Disable default metrics
         )
         self.best_thresholds = [0.5, 1.5, 2.5, 3.5]  # Initial thresholds for rounding
 
     def quadratic_weighted_kappa(self, y_true, y_pred):
-        return cohen_kappa_score(y_true, y_pred, weights='quadratic')
+        return cohen_kappa_score(y_true, y_pred, weights="quadratic")
 
     def threshold_Rounder(self, preds, thresholds):
-        return np.where(preds < thresholds[0], 0,
-                        np.where(preds < thresholds[1], 1,
-                                 np.where(preds < thresholds[2], 2,
-                                          np.where(preds < thresholds[3], 3, 4))))
+        return np.where(
+            preds < thresholds[0],
+            0,
+            np.where(
+                preds < thresholds[1], 1, np.where(preds < thresholds[2], 2, np.where(preds < thresholds[3], 3, 4))
+            ),
+        )
 
     def optimize_thresholds(self, y_true, preds):
         def evaluate_thresholds(thresholds):
             rounded_preds = self.threshold_Rounder(preds, thresholds)
             return -self.quadratic_weighted_kappa(y_true, rounded_preds)
-        
-        result = minimize(evaluate_thresholds, self.best_thresholds, method='Nelder-Mead')
+
+        result = minimize(evaluate_thresholds, self.best_thresholds, method="Nelder-Mead")
         self.best_thresholds = result.x  # Update best thresholds after optimization
 
     def train(self, X_train, y_train, X_val, y_val):
@@ -86,7 +88,7 @@ class ChildHealthModel:
             params=self.config.lgb_parameters,
             train_set=train_data,
             valid_sets=[val_data],
-            valid_names=['validation'],
+            valid_names=["validation"],
             feval=kappa_metric,
             # early_stopping_rounds=10
         )
@@ -135,14 +137,15 @@ class ChildHealthModel:
         feature_names = self.preprocessor.get_feature_names_out()
         return feature_importance, feature_names
 
+
 # Main function
 if __name__ == "__main__":
     # Load configuration
-    config_path = 'project_config.yml'
+    config_path = "project_config.yml"
     config = ProjectConfig.from_yaml(config_path)
 
     # Load and preprocess data
-    train_path = 'train.csv'
+    train_path = "train.csv"
     data = pd.read_csv(train_path)
     X = data[config.num_features + config.cat_features]
     y = data[config.target]
@@ -150,8 +153,8 @@ if __name__ == "__main__":
     # Define preprocessor
     preprocessor = ColumnTransformer(
         transformers=[
-            ('num', StandardScaler(), config.num_features),
-            ('cat', OneHotEncoder(drop='first'), config.cat_features)
+            ("num", StandardScaler(), config.num_features),
+            ("cat", OneHotEncoder(drop="first"), config.cat_features),
         ]
     )
 
@@ -178,13 +181,13 @@ if __name__ == "__main__":
 
     # Display feature importance
     feature_importance, feature_names = child_health_model.get_feature_importance()
-    feature_importance_df = pd.DataFrame({'feature': feature_names, 'importance': feature_importance})
-    feature_importance_df = feature_importance_df.sort_values(by='importance', ascending=False)
+    feature_importance_df = pd.DataFrame({"feature": feature_names, "importance": feature_importance})
+    feature_importance_df = feature_importance_df.sort_values(by="importance", ascending=False)
 
     plt.figure(figsize=(10, 8))
-    plt.barh(feature_importance_df['feature'], feature_importance_df['importance'], color='skyblue')
-    plt.xlabel('Importance')
-    plt.title('Feature Importance')
+    plt.barh(feature_importance_df["feature"], feature_importance_df["importance"], color="skyblue")
+    plt.xlabel("Importance")
+    plt.title("Feature Importance")
     plt.gca().invert_yaxis()
     plt.show()
 

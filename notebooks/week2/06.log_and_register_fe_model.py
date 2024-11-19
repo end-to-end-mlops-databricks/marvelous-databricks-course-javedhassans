@@ -1,28 +1,27 @@
 # Databricks notebook source
 
 # Install necessary packages
-#MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl
+# MAGIC %pip install childhealth_mlops_with_databricks-0.0.1-py3-none-any.whl
 
 # COMMAND ----------
 # Restart the Python environment
-#MAGIC dbutils.library.restartPython()
+# MAGIC dbutils.library.restartPython()
 
 # COMMAND ----------
 # Import libraries
-import yaml
-from databricks import feature_engineering
-from pyspark.sql import SparkSession
-from databricks.sdk import WorkspaceClient
 import mlflow
-from pyspark.sql import DataFrame, functions as F
-from sklearn.ensemble import RandomForestClassifier
+from databricks import feature_engineering
+from databricks.feature_engineering import FeatureFunction, FeatureLookup
+from databricks.sdk import WorkspaceClient
 from mlflow.models import infer_signature
+from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import functions as F
 from sklearn.compose import ColumnTransformer
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from datetime import datetime
-from databricks.feature_engineering import FeatureFunction, FeatureLookup
+
 from childHealth.config import ProjectConfig
 
 # COMMAND ----------
@@ -54,6 +53,7 @@ test_set = spark.table(f"{catalog_name}.{schema_name}.test_set")
 actigraph_table = spark.table(f"{catalog_name}.{schema_name}.actigraph_features")
 actigraph_table = actigraph_table.drop("non_wear_flag")
 
+
 # COMMAND ----------
 # Define function to aggregate actigraphy data
 def aggregate_actigraphy(data: DataFrame) -> DataFrame:
@@ -65,30 +65,26 @@ def aggregate_actigraphy(data: DataFrame) -> DataFrame:
         F.stddev("X").alias("X_std"),
         F.max("X").alias("X_max"),
         F.min("X").alias("X_min"),
-        
         F.mean("Y").alias("Y_mean"),
         F.stddev("Y").alias("Y_std"),
         F.max("Y").alias("Y_max"),
         F.min("Y").alias("Y_min"),
-        
         F.mean("Z").alias("Z_mean"),
         F.stddev("Z").alias("Z_std"),
         F.max("Z").alias("Z_max"),
         F.min("Z").alias("Z_min"),
-        
         F.mean("enmo").alias("enmo_mean"),
         F.stddev("enmo").alias("enmo_std"),
         F.max("enmo").alias("enmo_max"),
         F.min("enmo").alias("enmo_min"),
-        
         F.mean("light").alias("light_mean"),
         F.stddev("light").alias("light_std"),
         F.max("light").alias("light_max"),
         F.min("light").alias("light_min"),
-        
-        F.mean("battery_voltage").alias("battery_voltage_mean")
+        F.mean("battery_voltage").alias("battery_voltage_mean"),
     )
     return aggregated_df
+
 
 # Aggregate actigraphy data
 aggregated_features_df = aggregate_actigraphy(actigraph_table)
@@ -126,11 +122,15 @@ spark.sql(f"""
     TBLPROPERTIES (delta.enableChangeDataFeed = true)
 """)
 
-spark.sql(f"ALTER TABLE {catalog_name}.{schema_name}.actigraph_aggregated_features "
-          "ADD CONSTRAINT actigraoh_pk PRIMARY KEY(id);")
+spark.sql(
+    f"ALTER TABLE {catalog_name}.{schema_name}.actigraph_aggregated_features "
+    "ADD CONSTRAINT actigraoh_pk PRIMARY KEY(id);"
+)
 
-spark.sql(f"ALTER TABLE {catalog_name}.{schema_name}.actigraph_aggregated_features "
-          "SET TBLPROPERTIES (delta.enableChangeDataFeed = true);")
+spark.sql(
+    f"ALTER TABLE {catalog_name}.{schema_name}.actigraph_aggregated_features "
+    "SET TBLPROPERTIES (delta.enableChangeDataFeed = true);"
+)
 
 # Insert data from the temporary view into the feature table
 spark.sql(f"""
@@ -175,10 +175,10 @@ training_set = fe.create_training_set(
         FeatureFunction(
             udf_name=function_name,
             output_name="battery_voltage_mean_moving_avg",
-            input_bindings={"battery_voltage_mean": "battery_voltage_mean"}
+            input_bindings={"battery_voltage_mean": "battery_voltage_mean"},
         ),
     ],
-    exclude_columns=["update_timestamp_utc"]
+    exclude_columns=["update_timestamp_utc"],
 )
 
 # COMMAND ----------
@@ -200,10 +200,10 @@ testing_set = fe.create_training_set(
         FeatureFunction(
             udf_name=function_name,
             output_name="battery_voltage_mean_moving_avg",
-            input_bindings={"battery_voltage_mean": "battery_voltage_mean"}
+            input_bindings={"battery_voltage_mean": "battery_voltage_mean"},
         ),
     ],
-    exclude_columns=["update_timestamp_utc"]
+    exclude_columns=["update_timestamp_utc"],
 )
 
 # COMMAND ----------
@@ -223,22 +223,21 @@ y_test = testing_df[target]
 # Define preprocessing for numerical and categorical features
 preprocessor = ColumnTransformer(
     transformers=[
-        ('num', StandardScaler(), num_features),
-        ('cat', OneHotEncoder(handle_unknown='ignore'), cat_features)
+        ("num", StandardScaler(), num_features),
+        ("cat", OneHotEncoder(handle_unknown="ignore"), cat_features),
     ],
-    remainder='passthrough'
+    remainder="passthrough",
 )
 
 # Create the pipeline with preprocessing and Random Forest Classifier
-pipeline = Pipeline(steps=[
-    ('preprocessor', preprocessor),
-    ('classifier', RandomForestClassifier(**random_forest_parameters))
-])
+pipeline = Pipeline(
+    steps=[("preprocessor", preprocessor), ("classifier", RandomForestClassifier(**random_forest_parameters))]
+)
 
 # COMMAND ----------
 
 # Define the MLflow experiment and Git SHA for tracking
-mlflow.set_experiment(experiment_name='/Shared/child-health-fe')
+mlflow.set_experiment(experiment_name="/Shared/child-health-fe")
 git_sha = "830c17d988742482b639aec763ec731ac2dd4da5"
 
 # Start an MLflow run to track the training process
@@ -270,7 +269,8 @@ with mlflow.start_run(tags={"git_sha": git_sha, "branch": "week1-2"}) as run:
         training_set=training_set,
         signature=signature,
     )
-    
+
 mlflow.register_model(
-    model_uri=f'runs:/{run_id}/RandomForestClasf-pipeline-model-fe',
-    name=f"{catalog_name}.{schema_name}.child_health_model_random_forest_fe")
+    model_uri=f"runs:/{run_id}/RandomForestClasf-pipeline-model-fe",
+    name=f"{catalog_name}.{schema_name}.child_health_model_random_forest_fe",
+)
