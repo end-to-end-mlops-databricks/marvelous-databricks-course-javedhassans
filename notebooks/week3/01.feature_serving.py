@@ -106,8 +106,8 @@ spec = OnlineTableSpec(
 # Create the online table in Databricks
 try:
     online_table_pipeline = workspace.online_tables.get(name=online_table_name)
-except:
-    print("table already exists")
+except Exception as e:
+    print("table already exists", e)
     pass
 
 # COMMAND ----------
@@ -115,18 +115,14 @@ except:
 # 3. Create feture look up and feature spec table feature table
 
 # Define features to look up from the feature table
-features = [
-    FeatureLookup(
-        table_name=feature_table_name, lookup_key="id", feature_names=["predicted_sii"]
-    )
-]
+features = [FeatureLookup(table_name=feature_table_name, lookup_key="id", feature_names=["predicted_sii"])]
 
 # Create the feature spec for serving
 feature_spec_name = f"{catalog_name}.{schema_name}.return_predictions"
 try:
     fe.create_feature_spec(name=feature_spec_name, features=features, exclude_columns=None)
-except:
-    print("table already exists")
+except Exception as e:
+    print("table already exists", e)
     pass
 
 # COMMAND ----------
@@ -146,8 +142,8 @@ try:
             ]
         ),
     )
-except:
-    print("endpoint already exists")
+except Exception as e:
+    print("endpoint already exists", e)
     pass
 
 # COMMAND ----------
