@@ -1,0 +1,132 @@
+# project_config.yml
+
+# Databricks catalog and schema names for saving tables
+catalog_name: "mlops_students"
+schema_name: "javedhassi"
+
+# Parameters for model training
+# Set up Random Forest parameters
+random_forest_parameters:
+  n_estimators: 200         # Number of trees in the forest
+  max_depth: 10             # Maximum depth of each tree
+  min_samples_split: 5      # Minimum number of samples required to split a node
+  min_samples_leaf: 2       # Minimum number of samples required at each leaf node
+  class_weight: balanced    # Automatically balance classes
+  random_state: 42
+
+# Set up LightGBM parameters
+lgb_parameters:
+  learning_rate: 0.03884249148676395
+  max_depth: 12
+  num_leaves: 413
+  min_data_in_leaf: 14
+  feature_fraction: 0.7987976913702801
+  bagging_fraction: 0.7602261703576205
+  bagging_freq: 2
+  lambda_l1: 4.735462555910575
+  lambda_l2: 4.735028557007343e-06
+  n_estimators: 100
+  num_class: 5
+  metric: multi_logloss
+  objective: multiclass
+  boosting_type: gbdt
+
+pipeline_steps:
+  feature_engineering: true
+  scaling: true
+  handle_outliers: true
+  handle_missing_values: true
+
+logging:
+  level: INFO
+  file: logs/data_processor.log
+
+
+# Numerical features
+num_features:
+  - Basic_Demos-Age    # Age of the individual.
+  - CGAS-CGAS_Score    # Clinical Global Assessment Scale (CGAS) Score
+  - Physical-BMI       # Body Mass Index (BMI)
+  - Physical-Height    # Height of the individual.
+  - Physical-Weight    # Weight of the individual.
+  - Physical-Waist_Circumference # Waist circumference of the individual.
+  - Physical-Diastolic_BP # Diastolic blood pressure of the individual.
+  - Physical-HeartRate    # Heart rate of the individual.
+  - Physical-Systolic_BP  # Systolic blood pressure of the individual.
+  - Fitness_Endurance-Max_Stage # Max stage of endurance test.
+  - Fitness_Endurance-Time_Mins # Time taken to complete the endurance test in minutes.
+  - Fitness_Endurance-Time_Sec # Time taken to complete the endurance test in seconds.
+  - FGC-FGC_CU # Functional Games Characteristics (FGC) FGC-CU
+  - FGC-FGC_CU_Zone # Functional Games Characteristics (FGC) FGC-CU Zone
+  - FGC-FGC_GSND    # Functional Games Characteristics (FGC) FGC-GSND
+  - FGC-FGC_GSND_Zone # Functional Games Characteristics (FGC) FGC-GSND Zone
+  - FGC-FGC_GSD  # Functional Games Characteristics (FGC) FGC-GSD
+  - FGC-FGC_GSD_Zone  # Functional Games Characteristics (FGC) FGC-GSD Zone
+  - FGC-FGC_PU  # Functional Games Characteristics (FGC) FGC-PU
+  - FGC-FGC_PU_Zone  # Functional Games Characteristics (FGC) FGC-PU Zone
+  - FGC-FGC_SRL  # Functional Games Characteristics (FGC) FGC-SRL
+  - FGC-FGC_SRL_Zone  # Functional Games Characteristics (FGC) FGC-SRL Zone
+  - FGC-FGC_SRR  # Functional Games Characteristics (FGC) FGC-SRR
+  - FGC-FGC_SRR_Zone  # Functional Games Characteristics (FGC) FGC-SRR Zone
+  - FGC-FGC_TL  # Functional Games Characteristics (FGC) FGC-TL
+  - FGC-FGC_TL_Zone   # Functional Games Characteristics (FGC) FGC-TL Zone
+  - BIA-BIA_Activity_Level_num # Bioelectrical Impedance Analysis (BIA)
+  - BIA-BIA_BMC  # BIA-BMC
+  - BIA-BIA_BMI  # BIA-BMI
+  - BIA-BIA_BMR  # BIA-BMR
+  - BIA-BIA_DEE   # BIA-DEE
+  - BIA-BIA_ECW  # BIA-ECW
+  - BIA-BIA_FFM  # BIA-FFM
+  - BIA-BIA_FFMI # BIA-FFMI
+  - BIA-BIA_FMI # BIA-FMI
+  - BIA-BIA_Fat  # BIA-Fat
+  - BIA-BIA_Frame_num  # BIA-Frame
+  - BIA-BIA_ICW  # BIA-ICW
+  - BIA-BIA_LDM  # BIA-LDM
+  - BIA-BIA_LST  # BIA-LST
+  - BIA-BIA_SMM  # BIA-SMM
+  - BIA-BIA_TBW  # BIA-TBW
+  - PAQ_A-PAQ_A_Total # Physical Activity Questionnaire (PAQ) A Total
+  - PAQ_C-PAQ_C_Total # Physical Activity Questionnaire (PAQ) C Total
+  - PCIAT-PCIAT_01  # Parent-Child Internet Addiction Test
+  - PCIAT-PCIAT_02
+  - PCIAT-PCIAT_03
+  - PCIAT-PCIAT_04
+  - PCIAT-PCIAT_05
+  - PCIAT-PCIAT_06
+  - PCIAT-PCIAT_07
+  - PCIAT-PCIAT_08
+  - PCIAT-PCIAT_09
+  - PCIAT-PCIAT_10
+  - PCIAT-PCIAT_11
+  - PCIAT-PCIAT_12
+  - PCIAT-PCIAT_13
+  - PCIAT-PCIAT_14
+  - PCIAT-PCIAT_15
+  - PCIAT-PCIAT_16
+  - PCIAT-PCIAT_17
+  - PCIAT-PCIAT_18
+  - PCIAT-PCIAT_19
+  - PCIAT-PCIAT_20
+  - PCIAT-PCIAT_Total
+  - SDS-SDS_Total_Raw  # Sleep Disturbance Scale (SDS) Total Raw
+  - SDS-SDS_Total_T    # Sleep Disturbance Scale (SDS) Total T
+  # - PreInt_EduHx-Season
+  - PreInt_EduHx-computerinternet_hoursday
+
+# Categorical features
+cat_features:
+  - Basic_Demos-Enroll_Season
+  - Basic_Demos-Sex    # Gender of the individual.
+  - CGAS-Season       # Clinical Global Assessment Scale (CGAS) Season
+  - Physical-Season   # season during which the physical measurements were taken
+  - Fitness_Endurance-Season # Season for fitness recording
+  - FGC-Season        # Functional Games Characteristics (FGC) Season
+  - BIA-Season        # Bioelectrical Impedance Analysis (BIA) Season
+  - PAQ_A-Season      # Physical Activity Questionnaire (PAQ) A Season
+  - PAQ_C-Season      # Physical Activity Questionnaire (PAQ) C Season
+  - PCIAT-Season      # PCIAT-Season
+  - SDS-Season      # Sleep Disturbance Scale (SDS) Season
+
+# Target column
+target: sii

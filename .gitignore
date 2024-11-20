@@ -95,3 +95,8 @@ dmypy.json
 # VS code configuration
 .vscode
 .history
+
+.databricks
+
+# Ignore all .parquet files
+*.parquet
